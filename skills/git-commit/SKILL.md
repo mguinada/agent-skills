@@ -13,8 +13,6 @@ Generate concise and descriptive git commit messages based on staged code change
 <Subject>
 
 <Description>
-
-<Tags and External References>
 ```
 
 ## Best Practices
