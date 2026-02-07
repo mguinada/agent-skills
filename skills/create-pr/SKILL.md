@@ -7,6 +7,8 @@ description: Creates GitHub pull requests with properly formatted titles. Use wh
 
 Creates GitHub pull requests with properly formatted titles using the project's PR template.
 
+Do not add "Co-Authored-By", "Generated with" or any type of references to the AI model unless explicitly instructed by the user.
+
 ## Workflow
 
 ### Step 1: Check for staged changes

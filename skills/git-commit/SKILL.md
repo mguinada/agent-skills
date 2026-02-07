@@ -1,11 +1,12 @@
 ---
 name: git-commit
-description: Generate concise, descriptive git commit messages following best practices. Use when creating git commits from staged changes, crafting commit messages, or reviewing commit message quality.
+description: Generate concise, descriptive git commit messages following best practices. Use when creating git commits from staged changes, crafting commit messages, or reviewing commit message quality. Use when the user says /commit or asks to create a git commit.
 ---
 
 # Git Commit
 
 Generate concise and descriptive git commit messages based on staged code changes.
+Analyze staged changes and recent commit history to generate a well-crafted commit message.
 
 ## Commit Message Format
 
@@ -14,6 +15,8 @@ Generate concise and descriptive git commit messages based on staged code change
 
 <Description>
 ```
+
+Do not add `Co-Authored-By` unless explicitly instructed by the user.
 
 ## Best Practices
 
