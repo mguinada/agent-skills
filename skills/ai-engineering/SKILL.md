@@ -1,5 +1,5 @@
 ---
-name: ai-engineer
+name: ai-engineering
 description: Guide for building effective AI agents and agentic workflows. Use when designing, building, or debugging agentic systems - including choosing the right agentic pattern (workflows vs agents), implementing prompt chaining/routing/parallelization/orchestrator-workers/evaluator-optimizer workflows, building autonomous agents with tools, designing Agent-Computer Interfaces (ACI) and tool specifications, or troubleshooting/optimizing existing agent implementations. Covers augmented LLMs, agentic workflows, and autonomous agents based on Anthropic's production patterns.
 ---
 
