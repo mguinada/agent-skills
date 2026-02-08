@@ -118,3 +118,58 @@ Design graceful handoff mechanisms that allow agents to transfer control when th
 3. **Sandbox** before production deployment
 4. **Monitor** costs, latency, success rates
 5. **Iterate** based on real usage patterns
+
+## Performance & Scalability
+
+### Context Window Management
+
+**The Challenge:**
+- Tool definitions must be included in model context
+- Many tools = large metadata overhead
+- Increased cost, latency, reduced context for actual work
+
+**Symptoms of Context Bloat:**
+- Model struggles to identify relevant tools
+- Erratic behavior (ignoring useful tools, invoking irrelevant ones)
+- Loss of focus on user's original intent
+- Degraded reasoning quality
+
+**Mitigation Strategies:**
+
+1. **Tool Namespace Organization**
+   - Group related tools logically
+   - Use clear naming hierarchies
+   - Minimize tool count per agent
+
+2. **Dynamic Tool Loading**
+   - Load only relevant tools for current task
+   - Implement tool retrieval vs. pre-loading all
+   - Consider RAG-like approach for tool discovery
+
+3. **Tool Definition Optimization**
+   - Keep descriptions concise but complete
+   - Use examples selectively (balance clarity vs. tokens)
+   - Modular tools over complex multi-purpose ones
+
+### State Management
+
+**Challenge:** Remote MCP servers use stateful connections; REST APIs are stateless
+
+**Solutions:**
+- Build state-management layers for integration
+- Consider horizontal scaling implications
+- Use connection pooling for efficiency
+- Implement graceful reconnection logic
+
+### Cost Optimization
+
+**Measure First:**
+- Track token usage per agent/tool
+- Monitor API call frequency
+- Measure end-to-end latency
+
+**Optimize:**
+- Use smaller models for routine tasks
+- Cache frequently accessed data
+- Batch operations where possible
+- Set appropriate timeouts

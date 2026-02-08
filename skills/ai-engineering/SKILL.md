@@ -186,4 +186,5 @@ For comprehensive agent quality frameworks, evaluation strategies, and observabi
 - **[Operations & Security](references/operations.md)** - Production operations, security, and agent learning
 - **[Quality & Evaluation](references/quality-evaluation.md)** - Agent quality frameworks, evaluation strategies, observability
 - **[ACI Guide](references/aci.md)** - Agent-Computer Interface deep dive with tool design patterns
+- **[MCP Guide](references/mcp.md)** - Model Context Protocol for tool interoperability
 - **[Examples](references/examples.md)** - Real-world implementations and case studies

@@ -12,8 +12,51 @@ Treat tool interfaces with the same care as Human-Computer Interfaces (HCI). A w
 2. **Keep formats natural** - Match patterns from training data (natural language, markdown, JSON)
 3. **Minimize overhead** - Avoid line counting, escape sequences, complex validation
 4. **Design for errors** - Make it hard to misuse tools (poka-yoke)
+5. **Publish tasks, not APIs** - Tools should encapsulate user-facing tasks, not mirror backend APIs
 
 ## Tool Definition Best Practices
+
+### Publish Tasks, Not API Calls
+
+**Bad: Thin API wrapper**
+```python
+{
+    "name": "call_jira_api",
+    "description": "Call the JIRA API",
+    "parameters": {
+        "endpoint": {"type": "string"},
+        "method": {"type": "string"},
+        "body": {"type": "object"},
+        "headers": {"type": "object"}
+    }
+}
+```
+
+**Good: Task-oriented tool**
+```python
+{
+    "name": "create_critical_bug_in_jira_with_priority",
+    "description": "Create a critical bug report in JIRA with assigned priority",
+    "parameters": {
+        "title": {"type": "string", "description": "Bug title"},
+        "description": {"type": "string", "description": "Detailed bug description"},
+        "priority": {"type": "string", "enum": ["P0", "P1", "P2"]}
+    }
+}
+```
+
+**Why:** APIs are designed for developers with full knowledge. Agents must decide at runtime what to do. Task-oriented tools are more discoverable and self-documenting.
+
+### Tool Granularity
+
+**Make tools as granular as possible:**
+
+- Single responsibility per tool
+- Clear, well-documented purpose
+- Avoid multi-tool workflows encapsulated in single tool
+- Each tool should answer: What does it do? When to call? Side effects? Return value?
+
+**Exception:** When a common workflow requires many sequential calls, a single tool may be more efficient—document clearly.
 
 ### Descriptions
 
@@ -259,6 +302,148 @@ Treat tool interfaces with the same care as Human-Computer Interfaces (HCI). A w
     }
 }
 ```
+
+## Output Design
+
+### Design for Concise Output
+
+**Problem:** Large responses swamp context window, degrade performance
+
+**Solutions:**
+```python
+# Bad: Returns entire dataset
+{
+    "name": "query_database",
+    "returns": "Complete table with 10,000 rows"
+}
+
+# Good: Returns reference to data
+{
+    "name": "query_database",
+    "returns": "Table name where results are stored for subsequent retrieval"
+}
+
+# Alternative: Paginated results
+{
+    "name": "query_database",
+    "returns": {
+        "result_id": "temp_table_123",
+        "row_count": 10000,
+        "columns": ["id", "name", "value"]
+    }
+}
+```
+
+**Strategies:**
+- Use external storage for large data
+- Return references instead of full content
+- Use framework artifact services when available
+- Paginated results for large datasets
+
+### Descriptive Error Messages
+
+**Bad:** Generic error codes
+```python
+{
+    "error": "ERR_INVALID_INPUT"
+}
+```
+
+**Good:** Actionable guidance for LLM
+```python
+{
+    "error": "No product data found for product ID XXX. "
+             "Ask the customer to confirm the product name, "
+             "and look up the product ID by name to confirm you have the correct ID."
+}
+```
+
+**Why:** Error messages instruct the LLM on recovery. Provide next steps, not just failure indication.
+
+## Input Validation
+
+### Use Schema Validation
+
+**Always define schemas for inputs and outputs:**
+
+```python
+{
+    "name": "get_product_information",
+    "inputSchema": {
+        "type": "object",
+        "properties": {
+            "product_id": {
+                "type": "string",
+                "description": "Unique product identifier",
+                "pattern": "^[A-Z]{2}\\d{6}$"  # Validation
+            }
+        },
+        "required": ["product_id"]
+    },
+    "outputSchema": {
+        "type": "object",
+        "properties": {
+            "product_name": {"type": "string"},
+            "brand": {"type": "string"},
+            "status": {"type": "string", "enum": ["active", "inactive", "suspended"]}
+        }
+    }
+}
+```
+
+**Benefits:**
+- Runtime validation
+- Additional documentation for LLM
+- Clearer tool usage understanding
+
+## Tool Types
+
+### Information Retrieval Tools
+
+Retrieve data from external sources:
+- Web search, databases, document repositories
+- **Design:** Clear schemas, efficient querying, handle context limitations
+
+### Action/Execution Tools
+
+Perform real-world operations:
+- Send emails, post messages, execute code, control devices
+- **Design:** Clear side effects, confirmation for destructive actions
+
+### System/API Integration Tools
+
+Connect with existing systems:
+- Enterprise workflows, third-party services
+- **Design:** Document external APIs, secure key management, error handling
+
+### Human-in-the-Loop Tools
+
+Facilitate human collaboration:
+- Ask clarification, seek approval, hand off tasks
+- **Design:** Clear UI guidance, timeout handling
+
+## Agent Instructions vs Tool Documentation
+
+### Describe Actions, Not Implementations
+
+**Bad (tool-specific instructions):**
+```
+"To save a file, use the save_file tool with the filepath parameter..."
+```
+
+**Good (action-oriented):**
+```
+"Save the file to the user's project directory..."
+```
+
+**Why:** Eliminates conflict when tools change dynamically (e.g., MCP). Maintains separation of concerns.
+
+### Principles
+
+1. **Describe what, not how** - Explain objectives, not specific tool usage
+2. **Don't duplicate instructions** - Tool documentation should live in one place
+3. **Don't dictate workflows** - Allow autonomous tool selection
+4. **DO explain interactions** - Document side effects between tools
 
 ## Poka-Yoke (Error Prevention)
 
