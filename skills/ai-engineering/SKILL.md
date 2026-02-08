@@ -49,7 +49,7 @@ Effective prompts are critical to agentic system performance. When designing or 
 
 ## Context Engineering
 
-Context engineering is the practice of actively selecting, packaging, and managing the most relevant information for each step of an agent's plan. An agent's accuracy depends on focused, high-quality context.
+Context engineering is the practice of dynamically assembling and managing information within an LLM's context window to enable stateful, intelligent agents. It represents an evolution from prompt engineering—while prompts focus on static instructions, context engineering addresses the entire payload dynamically.
 
 **Key principles:**
 - **Curate attention:** Prevent context overload by including only relevant information for each step
@@ -57,6 +57,8 @@ Context engineering is the practice of actively selecting, packaging, and managi
 - **Progressive refinement:** Each step should produce a distilled, actionable input for the next
 
 **Example:** Instead of passing an entire document to summarize, extract key entities first, then retrieve only relevant context about those entities.
+
+For comprehensive guidance on sessions, memory, and context management, see **[references/context-engineering.md](references/context-engineering.md)**.
 
 ## Agentic Problem-Solving Process
 
@@ -166,6 +168,7 @@ For production operations, security, and agent learning patterns, see **[referen
 ## Resources
 
 - **[Workflows Reference](references/workflows.md)** - Detailed workflow patterns with code examples
+- **[Context Engineering](references/context-engineering.md)** - Sessions, memory, and context management
 - **[Agent Design](references/agent-design.md)** - Agent characteristics, ACI, guardrails, multi-agent patterns
 - **[Implementation Guide](references/implementation.md)** - Practical implementation guidance and debugging
 - **[Operations & Security](references/operations.md)** - Production operations, security, and agent learning
