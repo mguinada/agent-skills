@@ -5,20 +5,211 @@ description: Guide for generating effective prompts when building agentic system
 
 # Prompt Engineering for Agentic Systems
 
+## Overview
+
 Generate optimized prompts for agentic systems with clear rationale for technique selection.
 
-## Workflow
+**Core Principles:**
+- **Match technique to task** - Different agent types require different prompting approaches
+- **Trade-offs matter** - Always consider cost, latency, and accuracy when selecting techniques
+- **Structure over verbosity** - Well-organized prompts outperform long unstructured ones
+- **Test and iterate** - Verify prompts work before deploying to production
 
-When the user requests a prompt for an agent (e.g., "create a prompt for my email processing agent"):
+## When to Use
 
-1. **Analyze the request** - Identify agent type, task complexity, tools available
-2. **Select techniques** - Use the decision tree to choose appropriate prompting techniques
-3. **Generate the prompt** - Build from the canonical template
-4. **Explain the rationale** - Detail why each technique was chosen, including trade-offs
+Invoke this skill when:
+- Creating prompts for tool-using agents (ReAct pattern)
+- Designing prompts for planning or strategy agents
+- Building prompts for data processing or validation agents
+- Reducing hallucinations in fact-based tasks
+- Optimizing prompt performance or cost
+
+## Common Scenarios
+
+### Scenario 1: Tool-Using Agent (ReAct)
+
+**Use when**: Agent needs to reason and use tools autonomously
+
+```markdown
+## SYSTEM
+You are a research agent. Your goal is to gather information and synthesize findings.
+
+## INSTRUCTIONS
+Follow this pattern for each action:
+Thought: [what you want to do]
+Action: [tool name and parameters]
+Observation: [result from tool]
+
+When you have enough information, provide a final summary.
+
+## AVAILABLE TOOLS
+- search(query): Search for information
+- read(url): Read a webpage
+- finish(summary): Complete the task
+
+## STOP CONDITION
+Stop when you have answered the user's question or gathered sufficient information.
+```
+
+**Why ReAct works**: Couples reasoning with action in a loop, enabling autonomous tool use
+
+---
+
+### Scenario 2: Planning Agent (Tree of Thoughts)
+
+**Use when**: Agent needs to explore multiple approaches before committing
+
+```markdown
+## TASK
+Design a migration strategy from monolith to microservices.
+
+## INSTRUCTIONS
+Generate 3 different approaches:
+
+Approach 1: [description]
+- Pros: [list]
+- Cons: [list]
+- Effort: [estimate]
+
+Approach 2: [description]
+- Pros: [list]
+- Cons: [list]
+- Effort: [estimate]
+
+Approach 3: [description]
+- Pros: [list]
+- Cons: [list]
+- Effort: [estimate]
+
+Then select the best approach and explain your reasoning.
+```
+
+**Why Tree of Thoughts works**: Explores alternatives before committing, enables strategic decision-making
+
+---
+
+### Scenario 3: Data Validation (Few-Shot with Negative Examples)
+
+**Use when**: Agent needs consistent output format and should avoid common errors
+
+```markdown
+## TASK
+Validate email addresses and return structured JSON.
+
+## VALID EXAMPLES
+Input: user@example.com
+Output: {"valid": true, "reason": "proper email format"}
+
+Input: user.name@company.co.uk
+Output: {"valid": true, "reason": "proper email format"}
+
+## INVALID EXAMPLES (what NOT to accept)
+Input: user@.com
+Output: {"valid": false, "reason": "invalid domain format"}
+
+Input: @example.com
+Output: {"valid": false, "reason": "missing local part"}
+
+Input: user example.com
+Output: {"valid": false, "reason": "missing @ symbol"}
+
+## NOW VALIDATE
+Input: {user_input}
+```
+
+**Why Few-Shot works**: Examples establish patterns; negative examples prevent common mistakes
+
+---
+
+### Scenario 4: Factual Accuracy (Chain-of-Verification)
+
+**Use when**: Reducing hallucinations is critical
+
+```markdown
+## TASK
+Explain how transformers handle long-context windows
+
+## STEP 1: Initial Answer
+Provide your explanation...
+
+## STEP 2: Verification Questions
+Generate 5 questions that would expose errors in your answer:
+1. [question]
+2. [question]
+3. [question]
+4. [question]
+5. [question]
+
+## STEP 3: Answer Verification
+Answer each verification question factually...
+
+## STEP 4: Final Answer
+Refine your original answer based on verification results...
+```
+
+**Why CoVe works**: Models are more accurate answering focused verification questions than complex original queries
+
+---
+
+### Scenario 5: Complex Decision (Structured Thinking)
+
+**Use when**: Agent needs to analyze trade-offs before deciding
+
+```markdown
+## TASK
+Recommend: microservices or monolith for our startup?
+
+## THINKING PROTOCOL
+
+[UNDERSTAND]
+- Restate the problem in your own words
+- Identify what's actually being asked
+
+[ANALYZE]
+- Break down into sub-components
+- Note assumptions and constraints
+
+[STRATEGIZE]
+- Outline 2-3 approaches
+- Evaluate trade-offs
+
+[EXECUTE]
+- Provide final recommendation
+- Explain reasoning
+```
+
+**Why Structured Thinking works**: Forces thinking in explicit phases, reducing jumping to conclusions
+
+---
+
+### Scenario 6: Self-Improving Output (Self-Refine)
+
+**Use when**: You want the agent to review and improve its own work
+
+```markdown
+## TASK
+Write a README for the checkout API
+
+## STEP 1: Initial Draft
+[Generate initial README]
+
+## STEP 2: Critique
+Identify 3-5 improvements needed:
+- [weakness 1]
+- [weakness 2]
+- [weakness 3]
+
+## STEP 3: Refinement
+Rewrite addressing all identified improvements...
+```
+
+**Why Self-Refine works**: Model critiques and improves its own output, often higher quality than single-pass
+
+---
 
 ## Quick Decision Tree
 
-For fast technique selection:
+Use this table to select techniques quickly:
 
 | Agent Characteristic | Recommended Technique |
 |---------------------|----------------------|
@@ -31,54 +222,64 @@ For fast technique selection:
 | Reducing bias, multiple viewpoints | Multi-Perspective Prompting |
 | Uncertainty quantification | Confidence-Weighted Prompting |
 | Proprietary documentation, prevent hallucinations | Context Injection with Boundaries |
-| High-quality content refinement | Iterative Refinement Loop |
+| Self-review and improvement | Self-Refine |
+| Breaking complex problems into subproblems | Least-to-Most Prompting |
+| High-quality content through multiple passes | Iterative Refinement Loop |
+| Multi-stage workflows with specialized prompts | Prompt Chaining |
+| Improving recall for factual questions | Generated Knowledge Prompting |
+| Unclear how to structure the prompt | Meta-Prompting (nuclear option) |
 | Strict technical requirements | Constraint-First Prompting |
 | Requires consistent format/tone | Few-Shot (supports negative examples) |
 | Simple, well-defined task | Zero-Shot |
 | Domain-specific expertise | Role Prompting |
 | Procedural workflow | Instruction Tuning |
 
-For the full decision tree with detailed branching logic, see [decision-tree.md](references/decision-tree.md).
+For detailed decision logic with branching, see [decision-tree.md](references/decision-tree.md)
 
 ## Technique Reference
 
 All available techniques with examples, use cases, and risks: [techniques.md](references/techniques.md)
 
-Key techniques:
-- **ReAct** - For tool-using agents (reasoning + acting loop)
-- **Chain of Thought** - For complex reasoning tasks
-- **Chain-of-Verification (CoVe)** - For reducing hallucinations and ensuring factual accuracy
-- **Few-Shot** - For enforcing patterns and format (supports negative examples)
-- **Role Prompting** - For defining agent scope and expertise
-- **Tree of Thoughts** - For planning and strategy
-- **Self-Consistency** - For high-stakes verification
-- **Zero-Shot** - For simple, well-defined tasks
-- **Instruction Tuning** - For procedural workflows
-- **Structured Thinking Protocol** - For complex decisions with Understand → Analyze → Strategize → Execute
-- **Multi-Perspective Prompting** - For reducing bias through multiple viewpoints
-- **Confidence-Weighted Prompting** - For uncertainty quantification
-- **Context Injection with Boundaries** - For proprietary documentation to prevent hallucinations
-- **Iterative Refinement Loop** - For high-quality content through multiple passes
-- **Constraint-First Prompting** - For strict technical requirements
-- **Meta-Prompting** - The nuclear option: AI generates its own perfect prompt, then executes it
-
-## Anti-Patterns
+## Critical Anti-Patterns
 
 Common mistakes to avoid: [anti-patterns.md](references/anti-patterns.md)
 
-Critical warnings:
-- Do NOT use ReAct without tools available
-- Do NOT use Tree of Thoughts for deterministic problems
-- Do NOT use vague roles ("expert" without scope)
-- Do NOT omit stop conditions or error handling
+**Critical warnings**:
+- **Do NOT use ReAct without tools** - Adds unnecessary complexity
+- **Do NOT use Tree of Thoughts for deterministic problems** - Single correct answer doesn't need alternatives
+- **Do NOT use vague roles** - "Expert" without scope provides little benefit
+- **Do NOT omit stop conditions** - Agents may continue indefinitely
+- **Do NOT use Self-Refine for objective tasks** - Calculations don't need self-critique
 
 ## Canonical Template
 
-Use this template as the foundation for all generated prompts: [template.md](references/template.md)
+Use this template as the foundation for generated prompts: [template.md](references/template.md)
 
-## Rationale Template
+**Basic structure**:
+```markdown
+## SYSTEM / ROLE
+You are a [specific role] with authority over [explicit scope]
+Boundaries: [what you must NOT do]
 
-When explaining the generated prompt, use this structure:
+## TASK
+[Single clear goal in one sentence]
+
+## INSTRUCTIONS
+Follow these steps:
+1. [First step]
+2. [Second step]
+
+Constraints:
+- [Specific limits]
+- [Format requirements]
+
+## STOP CONDITION
+Stop when: [success criteria]
+```
+
+## Output Rationale Template
+
+When delivering a generated prompt, use this structure:
 
 ```markdown
 ## Generated Prompt for [Agent Name/Type]
@@ -87,21 +288,28 @@ When explaining the generated prompt, use this structure:
 
 ## Rationale
 
-**Agent Type**: [e.g., Tool-using, Planner, Conversational]
+**Agent Type**: [Tool-using / Planner / Conversational / Data-processor]
 
 **Task Complexity**: [Simple / Multi-step / Planning-heavy]
 
 **Techniques Used**:
-- [Technique]: Why it works for this agent/use case
-- [Technique]: Why it works for this agent/use case
+- [Technique]: [Why it works for this use case]
 
 **Expected Behavior**: [What the agent will do]
 
-**Trade-offs**: [Cost, latency, flexibility considerations]
+**Trade-offs**: [Cost, latency, flexibility - ALWAYS include if technique increases tokens or latency]
 
 **Considerations**: [Edge cases, limitations, or risks]
 ```
 
 ## Guardrail Rule
 
-If a prompt increases latency, token usage, or operational cost, this MUST be stated explicitly in the rationale section under "Trade-offs".
+If a prompt increases latency, token usage, or operational cost, this **MUST** be stated explicitly in the rationale under "Trade-offs."
+
+Techniques that increase cost/latency:
+- Self-Consistency (multiple generations)
+- Chain-of-Verification (multiple passes)
+- Iterative Refinement Loop (multiple passes)
+- Self-Refine (multiple passes)
+- Tree of Thoughts (exploring alternatives)
+- Least-to-Most Prompting (sequential subproblems)

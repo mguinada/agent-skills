@@ -55,3 +55,13 @@ Agents that encounter errors without guidance may fail unpredictably.
 Agents need explicit guidance on what tools they can use and any constraints.
 
 **Always include**: Available tools list, usage rules, and permissions
+
+### Avoid using Self-Refine for objective tasks
+For tasks with clear right/wrong answers (calculations, data extraction), self-critique adds unnecessary overhead.
+
+**Avoid**: Self-refinement loops for factual queries or deterministic transformations
+
+### Avoid over-decomposing with Least-to-Most
+Breaking problems into too many subproblems increases overhead and can lose context between steps.
+
+**Prefer**: 3-5 subproblems maximum; combine related steps where possible
