@@ -165,6 +165,18 @@ For production operations, security, and agent learning patterns, see **[referen
 - **Agent Identity & Security** - Agents as new class of principal, security layers, policy enforcement
 - **Agent Learning** - Self-evolution, adaptation techniques, multi-agent learning workflows
 
+## Quality & Evaluation
+
+For comprehensive agent quality frameworks, evaluation strategies, and observability practices, see **[references/quality-evaluation.md](references/quality-evaluation.md)**.
+
+**Key topics:**
+- **Four Pillars of Agent Quality** - Effectiveness, Efficiency, Robustness, Safety
+- **"Outside-In" Evaluation Hierarchy** - End-to-end (Black Box) and Trajectory (Glass Box) evaluation
+- **Evaluators** - Automated metrics, LLM-as-a-Judge, Agent-as-a-Judge, Human-in-the-Loop
+- **Observability Pillars** - Logging, Tracing, Metrics for agent visibility
+- **Agent Quality Flywheel** - Continuous improvement loop
+- **Three Core Principles** - For building trustworthy agents
+
 ## Resources
 
 - **[Workflows Reference](references/workflows.md)** - Detailed workflow patterns with code examples
@@ -172,5 +184,6 @@ For production operations, security, and agent learning patterns, see **[referen
 - **[Agent Design](references/agent-design.md)** - Agent characteristics, ACI, guardrails, multi-agent patterns
 - **[Implementation Guide](references/implementation.md)** - Practical implementation guidance and debugging
 - **[Operations & Security](references/operations.md)** - Production operations, security, and agent learning
+- **[Quality & Evaluation](references/quality-evaluation.md)** - Agent quality frameworks, evaluation strategies, observability
 - **[ACI Guide](references/aci.md)** - Agent-Computer Interface deep dive with tool design patterns
 - **[Examples](references/examples.md)** - Real-world implementations and case studies
