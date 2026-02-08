@@ -180,6 +180,72 @@ while not evaluator_llm(response):
     response = optimizer_llm(f"Improve based on: {feedback}")
 ```
 
+## Core Characteristics of High-Quality AI Agents
+
+Effective agents share these essential design properties:
+
+### 1. Explicit Role & Responsibility
+
+An agent has a clearly defined role, expertise, and responsibility. Its mandate is narrow, intentional, and unambiguous.
+
+An agent knows who it is, what it is responsible for, and what it must not do.
+
+### 2. Single-Purpose Focus
+
+An agent is optimized for a small, well-scoped objective. Broad scope, excessive context, or mixed responsibilities degrade performance.
+
+Many narrowly focused agents cooperating outperform a few generalist agents.
+
+### 3. Minimal, Purpose-Built Tooling
+
+An agent has access only to the tools strictly necessary to fulfill its role. Each tool is well-defined, reliable, and aligned with the agent's mandate.
+
+Excess tools increase ambiguity, decision errors, and cost.
+
+### 4. Deterministic Orchestration
+
+Agent behavior is governed by a clear execution structure (planning, acting, observing), not free-form autonomy. The system—not the agent—controls flow, retries, and termination.
+
+Autonomy is bounded; orchestration is explicit.
+
+### 5. Cooperation & Delegation
+
+Agents can collaborate through structured interaction: delegating subtasks, exchanging intermediate results, providing critique or validation.
+
+Agents do not "chat"; they coordinate.
+
+### 6. Self-Constraint & Guardrails
+
+Agents continuously evaluate their outputs and actions against role constraints, safety rules, and task objectives.
+
+Guardrails prevent scope creep, hallucinated authority, and unsafe actions. An agent knows when to stop, defer, or escalate.
+
+### 7. State Awareness (Session Memory)
+
+An agent maintains short-term, task-scoped state: what has been attempted, what succeeded or failed, what remains unresolved.
+
+This prevents repetition and incoherent reasoning within a task.
+
+### 8. Long-Term Memory (Selective & Intentional)
+
+Agents can persist useful knowledge across executions, but memory is curated, scoped, and retrievable by intent.
+
+Memory is a tool, not a transcript.
+
+### 9. Observability & Evaluability
+
+Agent decisions, tool calls, and outcomes are inspectable. The system can trace why an agent acted a certain way and assess quality over time.
+
+If you can't observe it, you can't trust it.
+
+### 10. Failure Awareness & Recovery
+
+Agents recognize uncertainty, errors, and missing information. They can retry safely, ask for clarification, or hand off to another agent or human.
+
+Graceful failure is a first-class capability.
+
+---
+
 ## Autonomous Agents
 
 Agents dynamically direct their own processes and tool usage. LLM maintains control over task execution.
