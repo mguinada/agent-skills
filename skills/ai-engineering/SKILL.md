@@ -104,12 +104,26 @@ Is the task solvable with a single well-crafted prompt?
 
 For detailed workflow implementations with code examples, see **[references/workflows.md](references/workflows.md)**.
 
+**When to use workflows:** Tasks with predictable, multi-step steps where subtasks are fixed or input-dependent.
+
 **Quick reference:**
 - **Prompt Chaining** - Sequential LLM calls, each processing previous output
 - **Routing** - Classify input and direct to specialized handler
 - **Parallelization** - Sectioning (independent subtasks) or Voting (multiple attempts)
 - **Orchestrator-Workers** - Central LLM breaks down tasks, delegates to workers, synthesizes results
 - **Evaluator-Optimizer** - One LLM generates, another evaluates and provides feedback in a loop
+
+**Code example (Orchestrator-Workers):**
+```python
+# Orchestrator breaks down task
+subtasks = llm(f"Break down: {task}")
+
+# Workers execute in parallel
+results = [execute(s) for s in subtasks]
+
+# Orchestrator synthesizes
+final = llm(f"Synthesize results: {results}")
+```
 
 ## Agent Design
 
@@ -127,12 +141,55 @@ For comprehensive agent design patterns, characteristics, and best practices, se
 9. Observability - Inspectable decisions and outcomes
 10. Failure Awareness - Graceful recovery
 
-**Key topics in agent-design.md:**
-- Autonomous Agents and the Run Loop
-- Agent-Computer Interface (ACI) and Tool Design
-- Guardrails and Security
-- Multi-Agent Coordination Patterns
-- Real-World Agent Examples
+**Key topics:**
+- **Autonomous Agents and the Run Loop** - The "Think, Act, Observe" cycle with exit conditions
+- **Guardrails** - Layered defense: relevance classifiers, safety filters, PII filters, tool safeguards
+- **Multi-Agent Patterns** - Manager (agents as tools), Decentralized (handoffs), Sequential, Iterative Refinement
+- **Real-World Examples** - Customer support agents, coding agents with test verification
+
+## Agent-Computer Interface (ACI)
+
+Tool design matters as much as prompt engineering. For comprehensive tool design patterns, see **[references/aci.md](references/aci.md)**.
+
+**Core principles:**
+- **Give tokens to think** - Don't force the model into corners
+- **Keep formats natural** - Match patterns from training data
+- **Minimize overhead** - Avoid line counting, escape sequences
+- **Publish tasks, not APIs** - Tools should encapsulate user-facing actions
+
+**Key patterns:**
+- **Tool Types** - Information Retrieval, Action/Execution, System/API Integration, Human-in-the-Loop
+- **Output Design** - Return references for large data, descriptive error messages for recovery
+- **Input Validation** - Schema validation for runtime checks and LLM guidance
+- **Documentation** - Clear descriptions, examples, edge cases, parameter constraints
+
+## Model Context Protocol (MCP)
+
+MCP is an open standard for connecting AI applications to external tools and data sources. For comprehensive coverage, see **[references/mcp.md](references/mcp.md)**.
+
+**What it solves:** The "N×M integration problem" - without a standard, every model-tool pairing requires custom connectors.
+
+**Core architecture:**
+- **Host** - Manages UX, orchestrates tools, enforces security
+- **Client** - Maintains server connections, manages sessions
+- **Server** - Advertises tools, executes commands, handles governance
+
+**Key capabilities:**
+- **Tools** - Standardized function definitions with JSON Schema
+- **Resources** - Static data access (validate trusted sources only)
+- **Prompts** - Reusable prompt templates (use rarely - security risk)
+- **Sampling** - Server can request LLM completion from client
+- **Elicitation** - Server can request user input via client UI
+
+**When to use MCP:**
+- Multi-environment deployments
+- Sharing tools across applications
+- Dynamic tool discovery needs
+- Ecosystem participation
+
+**Security considerations:**
+- Dynamic Capability Injection, Tool Shadowing, Confused Deputy
+- Requires multi-layered defense: HIL → API Gateway → SDK Allowlists → Schema Validation
 
 ## Implementation Guidance
 
@@ -148,34 +205,52 @@ response = claude.messages.create(
 )
 ```
 
-**Key topics in implementation.md:**
-- Start simple, add complexity only when needed
-- Framework considerations (Claude Agent SDK, Agno, CrewAI, LangChain)
-- Model selection strategy (prototype with best, optimize cost/latency)
-- Task decomposition procedure
-- Human intervention patterns
-- Debugging agents and testing strategy
+**Key topics:**
+- **Start Simple** - Optimize single calls first, add complexity only when needed
+- **Framework Considerations** - Claude Agent SDK, Agno, CrewAI, LangChain (or direct APIs)
+- **Model Selection** - Prototype with best, optimize cost/latency with smaller models
+- **Task Decomposition** - Break down until each step is automatable or human-gated
+- **Performance & Scalability** - Context window management, dynamic tool loading, state management
+- **Debugging** - Common issues: tool usage, loops, edge cases, compounding errors
 
 ## Operations & Security
 
 For production operations, security, and agent learning patterns, see **[references/operations.md](references/operations.md)**.
 
-**Key topics:**
-- **Agent Ops (GenAIOps)** - Evaluation strategy, LM as Judge, metrics-driven development, OpenTelemetry traces
-- **Agent Identity & Security** - Agents as new class of principal, security layers, policy enforcement
-- **Agent Learning** - Self-evolution, adaptation techniques, multi-agent learning workflows
+**Agent Ops (GenAIOps):**
+- **Evaluation Strategy** - Define success metrics first, use LM as Judge, metrics-driven development
+- **Observability** - OpenTelemetry traces for full trajectory: prompts, reasoning, tool calls, observations
+- **Human Feedback Loop** - Collect failures, convert to test cases, "close the loop" on error classes
+
+**Agent Identity & Security:**
+- **Agent as Principal** - Distinct from users and service accounts, requires verifiable identity with least privilege
+- **Security Layers** - Deterministic guardrails (rules) + Reasoning-based defenses (guard models)
+- **Tool Security Threats** - Dynamic Capability Injection, Tool Shadowing, Confused Deputy, Malicious Definitions
+
+**Multi-Layered Defense:**
+```
+Human-in-the-Loop → API Gateway → SDK Allowlists → Schema Validation → Secure Design
+```
 
 ## Quality & Evaluation
 
 For comprehensive agent quality frameworks, evaluation strategies, and observability practices, see **[references/quality-evaluation.md](references/quality-evaluation.md)**.
 
-**Key topics:**
-- **Four Pillars of Agent Quality** - Effectiveness, Efficiency, Robustness, Safety
-- **"Outside-In" Evaluation Hierarchy** - End-to-end (Black Box) and Trajectory (Glass Box) evaluation
-- **Evaluators** - Automated metrics, LLM-as-a-Judge, Agent-as-a-Judge, Human-in-the-Loop
-- **Observability Pillars** - Logging, Tracing, Metrics for agent visibility
-- **Agent Quality Flywheel** - Continuous improvement loop
-- **Three Core Principles** - For building trustworthy agents
+**Four Pillars of Agent Quality:**
+- **Effectiveness** - Goal completion, accuracy, instruction following
+- **Efficiency** - Latency, cost per interaction, token usage
+- **Robustness** - Edge case handling, error recovery, consistency
+- **Safety** - Guardrails, content filtering, policy compliance
+
+**Evaluation Hierarchy:**
+- **End-to-End (Black Box)** - Measure final outputs against golden dataset
+- **Trajectory (Glass Box)** - Inspect intermediate steps, tool calls, reasoning
+
+**Evaluators:**
+- **Automated Metrics** - Exact match, similarity scores, rule-based checks
+- **LLM-as-a-Judge** - Use powerful model to assess against rubric
+- **Agent-as-a-Judge** - Specialized evaluator agent critiques outputs
+- **Human-in-the-Loop** - Authoritative feedback for edge cases
 
 ## Resources
 
