@@ -15,6 +15,20 @@ Build effective agentic systems using proven patterns. Start simple, add complex
 2. Add workflows for predictable, multi-step tasks
 3. Use agents when flexibility and autonomous decision-making are required
 
+## When to Build an Agent
+
+Before committing to an agent, validate that your use case truly requires agentic capabilities. Consider alternatives first—deterministic solutions are simpler, faster, and more reliable.
+
+**Use agents when workflows involve:**
+
+| Criteria | Description | Example |
+|----------|-------------|---------|
+| **Complex decision-making** | Nuanced judgment, exceptions, context-sensitive decisions | Refund approval with edge cases |
+| **Brittle rule systems** | Rulesets that are unwieldy, costly to maintain, or error-prone | Vendor security reviews |
+| **Unstructured data** | Interpreting natural language, documents, or conversational input | Processing insurance claims |
+
+If your use case doesn't clearly fit these criteria, a deterministic or simple LLM solution may suffice.
+
 ## Prompt Engineering
 
 Effective prompts are critical to agentic system performance. When designing or refining prompts for LLM calls, workflows, or agents, leverage the **prompt-engineering skill** if available. It provides specialized guidance for crafting prompts that produce reliable, high-quality outputs.
@@ -184,6 +198,23 @@ while not evaluator_llm(response):
     response = optimizer_llm(f"Improve based on: {feedback}")
 ```
 
+### Prompt Templates
+
+For managing complexity without multi-agent overhead, use prompt templates instead of maintaining many individual prompts.
+
+**Template approach:**
+- Create a single flexible base prompt with variable placeholders
+- Inject policy variables at runtime for different contexts
+- Update variables rather than rewriting entire workflows
+
+**Example:**
+```
+You are a call center agent helping {{user_first_name}}, a loyal customer for {{user_tenure}}.
+The user may complain about {{user_complaint_categories}}. Greet them and answer any questions!
+```
+
+This adapts easily to various contexts, simplifying maintenance and evaluation.
+
 ## Core Characteristics of High-Quality AI Agents
 
 Effective agents share these essential design properties:
@@ -261,6 +292,16 @@ Agents dynamically direct their own processes and tool usage. LLM maintains cont
 - Environmental feedback (tool results, code execution) provides ground truth
 - Clear stopping conditions (completion, checkpoints, max iterations)
 
+### The Run Loop
+
+Every agent system needs a "run" concept—a loop that lets agents operate until an exit condition is reached. This loop is central to agent functioning.
+
+**Common exit conditions:**
+- Final output is produced
+- Model returns response without tool calls
+- Error occurs
+- Maximum iterations reached
+
 **Implementation pattern:**
 ```python
 def agent_loop(task, max_iterations=10):
@@ -284,6 +325,18 @@ def agent_loop(task, max_iterations=10):
 
 Tool design matters as much as prompt engineering. Tools are how agents interact with the world.
 
+### Tool Classification
+
+Agents require three types of tools:
+
+| Type | Purpose | Examples |
+|------|---------|----------|
+| **Data** | Retrieve context and information | Query databases, search web, read documents |
+| **Action** | Interact with systems to take actions | Send messages, update records, initiate processes |
+| **Orchestration** | Delegate to other agents | Handoffs to specialized agents (see Multi-Agent Patterns) |
+
+Each tool should have a standardized definition, enabling flexible many-to-many relationships between tools and agents. Well-documented, reusable tools improve discoverability and prevent redundant definitions.
+
 ### Tool Design Principles
 
 1. **Give tokens to think** - Don't write model into a corner
@@ -306,6 +359,63 @@ Tool design matters as much as prompt engineering. Tools are how agents interact
 - [ ] Example usage with realistic inputs
 - [ ] Edge cases and error conditions
 - [ ] Distinction from similar tools
+
+## Guardrails
+
+Guardrails are a layered defense mechanism. No single guardrail provides sufficient protection—using multiple, specialized guardrails together creates resilient agents.
+
+### Guardrail Taxonomy
+
+| Guardrail Type | Purpose | Example |
+|----------------|---------|---------|
+| **Relevance classifier** | Ensure responses stay within intended scope | Flag off-topic queries |
+| **Safety classifier** | Detect unsafe inputs (jailbreaks, prompt injection) | Block attempts to extract system prompts |
+| **PII filter** | Prevent exposure of personally identifiable information | Redact sensitive data from outputs |
+| **Moderation** | Flag harmful or inappropriate content | Detect hate speech, harassment |
+| **Tool safeguards** | Risk-based tool rating and escalation | Require approval for high-risk actions |
+| **Rules-based protections** | Deterministic measures for known threats | Blocklists, input limits, regex filters |
+| **Output validation** | Ensure responses align with requirements | Brand voice checks, format validation |
+
+### Implementing Guardrails
+
+1. **Focus on data privacy and content safety first**
+2. **Add guardrails based on real-world edge cases and failures**
+3. **Optimize for both security and user experience**—over-aggressive filtering harms UX
+
+### Tool Risk Rating
+
+Assign each tool a risk level based on:
+
+- **Low:** Read-only operations, reversible actions
+- **Medium:** Write access with limited impact, requires permissions
+- **High:** Irreversible actions, financial impact, sensitive data changes
+
+Use risk ratings to trigger automated safeguards: pause for checks before high-risk tools, escalate to human approval, or require additional authentication.
+
+## Multi-Agent Coordination Patterns
+
+When a single agent becomes overloaded with tools or complex logic, split responsibilities across multiple specialized agents.
+
+### When to Split
+
+| Trigger | Indication |
+|---------|------------|
+| **Complex logic** | Prompts contain many conditional branches; prompt templates become difficult to scale |
+| **Tool overload** | Tools are similar or overlapping; improving clarity doesn't fix selection errors |
+
+### Coordination Patterns
+
+**Manager Pattern (Agents as Tools)**
+- Central coordinator delegates to specialized agents via tool calls
+- Coordinator synthesizes results and maintains control
+- Ideal when you want one agent controlling workflow execution
+
+**Decentralized Pattern (Agent Handoffs)**
+- Agents operate as peers, handing off execution to one another
+- One-way transfer of control with conversation state
+- Ideal for conversation triage or when specialized agents should fully take over
+
+Both patterns keep components flexible, composable, and driven by clear prompts.
 
 ## Real-World Patterns
 
@@ -360,6 +470,36 @@ response = claude.messages.create(
 
 **Recommendation:** Start with direct LLM APIs. Most patterns need only a few lines of code. If using frameworks, understand underlying code.
 
+### Model Selection Strategy
+
+Different models have different strengths in task complexity, latency, and cost. Not every task requires the most capable model.
+
+**Recommended approach:**
+1. **Prototype with the best model** to establish a performance baseline
+2. **Set up evals** to measure accuracy and quality
+3. **Optimize cost and latency** by swapping smaller models where acceptable results are maintained
+
+| Task Type | Model Choice |
+|-----------|--------------|
+| Simple retrieval, classification | Smaller, faster models |
+| Complex reasoning, decisions | More capable models |
+| Coding, analysis | Most capable models available |
+
+## Human Intervention
+
+Plan for human intervention early—it's a critical safeguard for improving real-world performance.
+
+### When to Escalate
+
+| Trigger | Condition | Example |
+|---------|-----------|---------|
+| **Failure threshold exceeded** | Agent fails after multiple attempts | Cannot understand customer intent after 3 tries |
+| **High-risk action** | Sensitive, irreversible, or high-stakes operations | Canceling orders, large refunds, payments |
+
+### Implementation
+
+Design graceful handoff mechanisms that allow agents to transfer control when they cannot complete a task. In customer service, this means escalating to a human agent. For coding agents, this means handing control back to the user.
+
 ## Debugging Agents
 
 ### Common Issues
@@ -388,8 +528,10 @@ response = claude.messages.create(
 
 ## Further Reading
 
-Based on Anthropic's "Building Effective AI Agents":
-- Augmented LLMs as foundation
-- Workflows vs. Agents architectural distinction
-- Production patterns from customer implementations
-- Tool documentation and testing importance
+This skill synthesizes best practices from production AI systems across multiple sources:
+
+- **Augmented LLMs as foundation** - Start with retrieval and examples before adding complexity
+- **Workflows vs. Agents** - Architectural distinction and when to use each pattern
+- **Production patterns** - Real-world implementations from customer deployments
+- **Tool design** - Documentation, testing, and ACI principles
+- **Guardrails** - Layered defense for safe, predictable agent behavior
