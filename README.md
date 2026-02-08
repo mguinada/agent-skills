@@ -53,6 +53,39 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ---
 
+## Skill Evaluation
+
+This project includes a built-in evaluation script that validates Agent Skills format compliance and content quality.
+
+### Usage
+
+```bash
+# List all available skills
+npm run eval
+
+# Lint a specific skill
+npm run eval -- tdd
+
+# Lint all skills
+npm run eval:all
+
+# Detailed review of all skills (includes quality checks)
+npm run eval:review
+```
+
+### What It Checks
+
+- **Required fields**: `name`, `description`, `version`, `tags`
+- **Recommended fields**: `author`
+- **Content quality**: Code examples, step-by-step structure, trigger hints
+- **Frontmatter validity**: YAML parsing and format compliance
+
+### Score Interpretation
+
+- **90-100%**: Production-ready
+- **70-89%**: Good quality with minor improvements needed
+- **Below 70%**: Needs work before deployment
+
 ## Installation
 
 ```bash

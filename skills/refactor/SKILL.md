@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: Refactor code to make architecture and implementation simpler using TDD methodology. Preserves functionality through tests.
+description: Refactor code to make architecture and implementation simpler using TDD methodology. Preserves functionality through tests. Use when simplifying complex code, improving architecture, or reducing technical debt.
 author: AINA Project
 version: 1.0.0
 tags: [refactoring, tdd, code-quality, simplification]

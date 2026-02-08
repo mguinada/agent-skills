@@ -1,6 +1,9 @@
 ---
 name: git-commit
 description: Generate concise, descriptive git commit messages following best practices. Use when creating git commits from staged changes, crafting commit messages, or reviewing commit message quality. Use when the user says /commit or asks to create a git commit.
+author: mguinada
+version: 1.0.0
+tags: [git, commit, workflow, best-practices]
 ---
 
 # Git Commit
