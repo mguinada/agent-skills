@@ -15,6 +15,10 @@ Build effective agentic systems using proven patterns. Start simple, add complex
 2. Add workflows for predictable, multi-step tasks
 3. Use agents when flexibility and autonomous decision-making are required
 
+## Prompt Engineering
+
+Effective prompts are critical to agentic system performance. When designing or refining prompts for LLM calls, workflows, or agents, leverage the **prompt-engineering skill** if available. It provides specialized guidance for crafting prompts that produce reliable, high-quality outputs.
+
 ## Pattern Selection Guide
 
 | Pattern | Use When | Key Benefit |
