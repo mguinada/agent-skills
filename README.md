@@ -45,6 +45,14 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ---
 
+### AI Engineering
+
+**Use when:** Designing, building, or debugging agentic systems. Triggers on choosing agentic patterns (workflows vs agents), implementing prompt chaining/routing/parallelization/orchestrator-workers/evaluator-optimizer workflows, building autonomous agents with tools, designing Agent-Computer Interfaces (ACI) and tool specifications, or troubleshooting/optimizing existing agent implementations.
+
+**Scope:** Guide for building effective AI agents and agentic workflows based on Anthropic's production patterns. Covers augmented LLMs, agentic workflows (prompt chaining, routing, parallelization, orchestrator-workers, evaluator-optimizer), autonomous agents, Agent-Computer Interface (ACI) design, tool specifications, and real-world examples (customer support, coding agents). Emphasizes starting simple and adding complexity only when needed.
+
+---
+
 ### TDD (Test-Driven Development)
 
 **Use when:** Implementing a new feature or function, fixing a bug (write reproducing test first), adding tests to legacy code, reviewing code for test refactoring opportunities, or improving existing test quality and organization.
