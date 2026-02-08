@@ -41,6 +41,49 @@ Is the task solvable with a single well-crafted prompt?
             └─ No → Reconsider approach
 ```
 
+## Task Decomposition
+
+Task decomposition is the process of identifying discrete steps required to complete a workflow. Decompose iteratively until each step can be executed reliably by an LLM, a tool, or a human.
+
+### Decomposition Procedure
+
+For each step in a workflow, evaluate:
+
+**1. Execution Capability**
+Can this step be completed by:
+- An LLM alone?
+- A deterministic tool call?
+- An LLM orchestrating tool calls?
+- If none apply → requires human intervention
+
+**2. Human Baseline Analysis**
+If a human would perform this step, identify:
+- The exact decision being made
+- The inputs required
+- The success criteria
+
+Attempt to decompose further until automatable or explicitly human-gated.
+
+**3. Granularity Control**
+Continue decomposition until:
+- The step has a single clear objective
+- Inputs and outputs are well defined
+- Failure modes are observable
+
+**Stop** when further subdivision does not improve reliability, observability, or control.
+
+### Workflow Step Design Principles
+
+Each step MUST satisfy:
+
+| Principle | Requirement |
+|-----------|-------------|
+| **Single Responsibility** | Each step performs one well-defined action or decision. Mixed responsibilities are prohibited. |
+| **Explicit I/O** | Declare required inputs, produced outputs, and side effects (if any). |
+| **Deterministic Boundaries** | Prefer deterministic tools over free-form LLM reasoning where possible. |
+
+---
+
 ## Workflows
 
 ### Prompt Chaining
