@@ -115,3 +115,21 @@ Minimal structure:
 - ROLE
 - TASK
 - Output format only
+
+### For Least-to-Most Prompting
+Include decomposition phase:
+- Initial decomposition instruction
+- Sequential subproblem solving
+- Explicit instruction to use previous results
+
+### For Self-Refine Agents
+Include critique phase:
+- Initial response prompt
+- Critique criteria
+- Refinement instructions
+
+### For Prompt Chaining
+Define clear stage boundaries:
+- Input/output format for each stage
+- How to pass data between stages
+- Stage-specific instructions

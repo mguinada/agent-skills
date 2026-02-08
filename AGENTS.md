@@ -6,6 +6,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a collection of AI agent skills following the [Agent Skills](https://agentskills.io/) format. Each skill is a self-contained knowledge package that extends Claude Code's capabilities for specific development tasks.
 
+## Plan Mode
+
+- Make the plan extremely concise. Sacrifice grammar for the sake of concision.
+- At the end of each plan, give me a list of unresolved questions to answer, if any.
+- Always follow the instructions in `.github/instructions/` for context-aware coding guidelines.
+- The plan should be broken down into clear, discrete iterations. Each iteration has a full TDD cycle, linting, and type checking.
+- After each iteration, give me prompt control back to review the code and provide feedback before proceeding to the next step.
+- Do not proceed to the next iteration until I explicitly tell you to.
+- As the final step of the plan, update any documentation files as needed to reflect the new code.
+
+## Git commits
+
+- Never add `Co-Authored-By:` to commit messages.
+- Use the `git-commit` skill if available
+
+## Pull Requests
+
+- Always create a pull request for code changes, even if working alone.
+- Use the `create-pr` skill if available
+
 ## Installation
 
 Users install skills via:

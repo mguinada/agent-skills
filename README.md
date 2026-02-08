@@ -31,9 +31,9 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ### Prompt Engineering for Agentic Systems
 
-**Use when:** The user asks to create, generate, or design prompts for AI agents, especially for tool-using agents, planning agents, or autonomous systems.
+**Use when:** Creating prompts for AI agents, especially for tool-using agents, planning agents, data processing agents, or when reducing hallucinations in fact-based tasks.
 
-**Scope:** Guides generation of effective prompts for agentic systems with clear rationale for technique selection. Uses a decision tree to choose techniques (e.g. ReAct, Chain of Thought, Few-Shot), a canonical template, and references for techniques, anti-patterns, and trade-offs.
+**Scope:** Generates effective prompts for agentic systems with concrete scenario examples and technique selection guidance. Covers ReAct for tool-using agents, Tree of Thoughts for planning, Few-Shot with negative examples, Chain-of-Verification for factual accuracy, Structured Thinking for complex decisions, Self-Refine for iterative improvement, Least-to-Most for decomposing complex problems, and more. Includes quick decision tree, anti-patterns to avoid, and rationale template with trade-off warnings.
 
 ---
 

@@ -30,7 +30,15 @@ Use this decision tree to systematically select the appropriate prompting techni
 - **Yes → Zero-Shot** (Minimal overhead for clear tasks)
 - **No → Step 7**
 
-### Step 7: Is a specific domain expertise required?
+### Step 7: Can the problem be decomposed into sequential subproblems?
+- **Yes → Least-to-Most Prompting** (Break down and solve sequentially)
+- **No → Step 8**
+
+### Step 8: Would self-critique improve the output quality?
+- **Yes → Self-Refine** (Model reviews and improves its own output)
+- **No → Step 9**
+
+### Step 9: Is a specific domain expertise required?
 - **Yes → Role Prompting** (Narrows reasoning space with expertise)
 - **No → Instruction Tuning** (Structured, numbered instructions)
 
@@ -43,6 +51,17 @@ Use this decision tree to systematically select the appropriate prompting techni
 | High-stakes correctness | Self-Consistency |
 | Factual accuracy, hallucination reduction | Chain-of-Verification (CoVe) |
 | Single-path complex reasoning | Chain of Thought |
+| Complex decisions with trade-offs | Structured Thinking Protocol |
+| Reducing bias, multiple viewpoints | Multi-Perspective Prompting |
+| Uncertainty quantification | Confidence-Weighted Prompting |
+| Proprietary documentation, prevent hallucinations | Context Injection with Boundaries |
+| Self-review and improvement | Self-Refine |
+| Breaking complex problems into subproblems | Least-to-Most Prompting |
+| High-quality content through multiple passes | Iterative Refinement Loop |
+| Multi-stage workflows with specialized prompts | Prompt Chaining |
+| Improving recall for factual questions | Generated Knowledge Prompting |
+| Unclear how to structure the prompt | Meta-Prompting (nuclear option) |
+| Strict technical requirements | Constraint-First Prompting |
 | Requires consistent format/tone | Few-Shot |
 | Simple, well-defined task | Zero-Shot |
 | Domain-specific expertise | Role Prompting |

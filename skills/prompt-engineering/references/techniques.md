@@ -632,3 +632,176 @@ Your task:
 **When to use Meta-Prompting vs direct prompting**:
 - Meta-Prompting: For complex, open-ended tasks where prompt structure is unclear
 - Direct prompting: For well-defined tasks where you know what you need
+
+---
+
+## Least-to-Most Prompting
+
+**Use when**: Complex problems that can be decomposed into sequential subproblems
+
+**Why it works for agents**: Breaks complex problems into manageable subproblems, solves them sequentially, and uses solutions from earlier subproblems to solve later ones
+
+**Risk**: Higher latency; requires problems that can be naturally decomposed
+
+**Template**:
+```markdown
+Problem: [complex problem]
+
+First, decompose this problem into a list of subproblems in order:
+1. [First subproblem]
+2. [Second subproblem]
+3. [Third subproblem]
+
+Then solve each subproblem in sequence, using the results from previous subproblems.
+```
+
+**Example**:
+```markdown
+Problem: Write a Python script that downloads weather data from an API, processes it to calculate daily averages, and generates a visualization
+
+First, decompose this problem into a list of subproblems in order:
+1. Set up API credentials and make a request to fetch weather data
+2. Parse and clean the raw data
+3. Calculate daily averages from the cleaned data
+4. Create a visualization using matplotlib
+5. Combine everything into a single script
+
+Then solve each subproblem in sequence...
+
+[SUBPROBLEM 1: API Setup and Request]
+[Model solves first subproblem...]
+
+[SUBPROBLEM 2: Data Parsing]
+[Model solves second subproblem using result from step 1...]
+
+[Continue for all subproblems...]
+```
+
+**When to use Least-to-Most vs direct prompting**:
+- Least-to-Most: For complex multi-step problems where later steps depend on earlier results
+- Direct prompting: For simpler tasks or when decomposition isn't natural
+
+---
+
+## Self-Refine
+
+**Use when**: Iterative improvement through self-critique, or when you want the model to review and enhance its own outputs
+
+**Why it works for agents**: The model generates an initial response, critiques it, and refines it based on the critique—often producing higher quality than single-pass generation
+
+**Risk**: Higher latency (multiple passes); may be overkill for simple tasks
+
+**Template**:
+```markdown
+Task: [your request]
+
+Step 1: Provide your initial response
+
+Step 2: Critique your response:
+- Identify 3-5 areas for improvement
+- Note any missing information or weaknesses
+
+Step 3: Refine your response based on your critique
+```
+
+**Example**:
+```markdown
+Task: Write a README for a Python package that calculates Fibonacci sequences
+
+Step 1: Provide your initial response
+[Model generates initial README...]
+
+Step 2: Critique your response:
+- Identify 3-5 areas for improvement
+- Note any missing information or weaknesses
+
+[Model identifies: missing installation instructions, no example usage, unclear API documentation, no contribution guidelines, missing badges]
+
+Step 3: Refine your response based on your critique
+[Model generates improved README with all identified improvements...]
+```
+
+**When to use Self-Refine vs Iterative Refinement**:
+- Self-Refine: Model critiques and refines its own output
+- Iterative Refinement: Pre-defined iterations with specific criteria for each pass
+
+---
+
+## Prompt Chaining
+
+**Use when**: Breaking complex workflows into sequential prompt stages, where each stage transforms the output from the previous stage
+
+**Why it works for agents**: Separates concerns into distinct stages, each with a specialized prompt, making complex pipelines more manageable and debuggable
+
+**Risk**: Higher latency (multiple sequential calls); requires careful design of intermediate formats
+
+**Template**:
+```markdown
+[STAGE 1: Stage Name]
+[prompt for first stage]
+
+[STAGE 2: Stage Name]
+[prompt that processes output from stage 1]
+
+[STAGE 3: Final Stage]
+[prompt that produces final output]
+```
+
+**Example**:
+```markdown
+[STAGE 1: Extract Requirements]
+Analyze this user request and extract functional requirements:
+{user_request}
+
+Output format: JSON array of requirement objects
+
+[STAGE 2: Generate Test Cases]
+Given these requirements from stage 1:
+{stage1_output}
+
+Generate comprehensive test cases for each requirement.
+
+[STAGE 3: Prioritize by Risk]
+Review these test cases from stage 2:
+{stage2_output}
+
+Prioritize them by risk level (Critical, High, Medium, Low) and provide rationale.
+```
+
+**When to use Prompt Chaining vs single prompt**:
+- Prompt Chaining: For complex multi-stage workflows where each stage needs specialized prompting
+- Single prompt: For simpler tasks or when stages don't require different approaches
+
+---
+
+## Generated Knowledge Prompting
+
+**Use when**: The model needs relevant context to answer accurately, or when you want to reduce hallucinations by having the model generate relevant facts first
+
+**Why it works for agents**: Having the model generate relevant knowledge before answering improves accuracy, especially for questions requiring specific facts the model might not recall reliably
+
+**Risk**: Higher latency (two-pass); model may generate incorrect knowledge
+
+**Template**:
+```markdown
+Question: [your question]
+
+Step 1: Generate 5-10 facts relevant to answering this question
+
+Step 2: Using those facts, answer the question
+```
+
+**Example**:
+```markdown
+Question: What were the key technical innovations in the Space Shuttle program?
+
+Step 1: Generate 5-10 facts relevant to answering this question
+[Model generates: reusable thermal tiles, solid rocket boosters, main engines that could be throttled, computerized fly-by-wire control, etc.]
+
+Step 2: Using those facts, answer the question
+[Model uses the generated facts to provide a more accurate and comprehensive answer...]
+```
+
+**When to use Generated Knowledge vs direct prompting**:
+- Generated Knowledge: For factual questions where recall might be unreliable
+- Direct prompting: For general questions or when speed is priority
