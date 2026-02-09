@@ -128,6 +128,18 @@ results = [execute(s) for s in subtasks]
 final = llm(f"Synthesize results: {results}")
 ```
 
+## Error Handling & Guardrails
+
+Guardrails are a layered defense. No single layer is sufficient—combine multiple specialized checks for resilient agents.
+
+**Layered Defense Pattern:**
+```
+Input → Relevance Check → Safety Filter → Agent → Tool Safeguards → Output Validation → Response
+            ↓block          ↓block                  ↓risk-rating          ↓block
+```
+
+For a complete implementation with code examples and tests, see **[references/agent-design.md](references/agent-design.md#implementation-example)**.
+
 ## Agent Design
 
 For comprehensive agent design patterns, characteristics, and best practices, see **[references/agent-design.md](references/agent-design.md)**.
