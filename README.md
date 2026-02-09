@@ -63,15 +63,17 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Skill Evaluation
 
-This project includes a built-in evaluation script that validates Agent Skills format compliance and content quality.
+This project includes multiple ways to evaluate Agent Skills quality and format compliance.
 
-### Usage
+### Built-in Evaluation Script
+
+Validates Agent Skills format compliance with rule-based checks and optional LLM-based qualitative analysis.
 
 ```bash
 # List all available skills
 npm run eval
 
-# Lint a specific skill
+# Lint a specific skill (rule-based validation)
 npm run eval -- tdd
 
 # Lint all skills
@@ -79,20 +81,58 @@ npm run eval:all
 
 # Detailed review of all skills (includes quality checks)
 npm run eval:review
+
+# LLM evaluation of a specific skill (requires API key)
+npm run eval -- tdd llm
+
+# LLM evaluation of all skills
+npm run eval:llm
 ```
 
-### What It Checks
+#### What It Checks
 
+**Rule-based validation:**
 - **Required fields**: `name`, `description`, `version`, `tags`
 - **Recommended fields**: `author`
 - **Content quality**: Code examples, step-by-step structure, trigger hints
 - **Frontmatter validity**: YAML parsing and format compliance
 
-### Score Interpretation
+**LLM evaluation (when using `llm` flag):**
+- **Description quality**: specificity, trigger terms, completeness, distinctiveness
+- **Content quality**: conciseness, actionability, workflow clarity, progressive disclosure
+- **Structure quality**: frontmatter, examples, edge cases, error handling
+
+#### Score Interpretation
 
 - **90-100%**: Production-ready
 - **70-89%**: Good quality with minor improvements needed
 - **Below 70%**: Needs work before deployment
+
+#### LLM Configuration
+
+The LLM evaluation uses Groq API. Configure in `.env`:
+
+```bash
+# LLM API configuration for evaluation scripts
+# For Groq: https://api.groq.com/openai/v1
+OPEN_AI_LLM_URL=https://api.groq.com/openai/v1
+LLM_API_KEY=your_api_key_here
+```
+
+### Tessl Integration
+
+[Tessl](https://tessl.com/) provides AI-powered skill evaluation with deep qualitative analysis.
+
+```bash
+# Install Tessl CLI (first time only)
+npm install -D @tessl/cli
+
+# Review a specific skill
+npx tessl skill review skills/ai-engineering/
+
+# Review all skills
+npx tessl skill review skills/*/
+```
 
 ## Installation
 

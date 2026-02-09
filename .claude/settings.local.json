@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pdftotext:*)",
+      "Bash(wc:*)",
+      "WebSearch",
+      "Bash(DEBUG_LLM=1 npm run eval:*)",
+      "Bash(npm run eval:*)",
+      "Bash(npm run eval:all:*)"
+    ]
+  }
+}
