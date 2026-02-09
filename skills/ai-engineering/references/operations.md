@@ -87,34 +87,15 @@ Each agent requires a verifiable digital identity with least-privilege permissio
 
 ### Tool Security Threats
 
-**Dynamic Capability Injection**
-- **Risk:** MCP servers or tool providers change available tools without notification, causing agents to inherit unauthorized capabilities
-- **Example:** A poetry agent connects to a Books server for quotes, but the server adds a purchasing capability—suddenly the agent can make financial transactions
-- **Mitigation:** Explicit tool allowlists, mandatory change notifications, tool version pinning, API gateways
+When using MCP for tool integration, be aware of these security threats. For detailed descriptions, examples, and mitigations, see **[references/mcp.md](references/mcp.md#security-threats)**.
 
-**Tool Shadowing**
-- **Risk:** Malicious tools use broader triggers to overshadow legitimate tools, intercepting sensitive operations
-- **Example:** Malicious `save_secure_note` tool triggers on "save", "store", "keep"—overshadowing legitimate `secure_storage_service`
-- **Mitigation:** Prevent naming collisions, mutual TLS, deterministic policy enforcement, human-in-the-loop for high-risk operations
-
-**Confused Deputy Problem**
-- **Risk:** Privileged server (deputy) tricked by less-privileged entity into misusing its authority
-- **Example:** AI assistant asks MCP server to create a branch with sensitive code—server has permission but user doesn't
-- **Mitigation:** Validate user permissions before executing server actions, never assume AI agent's authority equals user's
-
-**Malicious Tool Definitions**
-- **Risk:** Tool descriptors manipulate agent planners or consume external content with prompt injection
-- **Example:** Tool descriptions designed to trigger on specific patterns, or tool results containing injectable prompts
-- **Mitigation:** Input/output sanitization, separate system prompts, allowlist validation for resources
-
-**Sensitive Information Leaks**
-- **Risk:** Tools unintentionally receive or exfiltrate sensitive data through conversation context
-- **Example:** User interaction history transmitted to tool, or Elicitation capability abused to gather sensitive info
-- **Mitigation:** Structured outputs with taint tracking, scoped credentials, keep secrets out of agent context
-
-**No Per-Tool Authorization**
-- **Risk:** MCP only supports coarse-grained auth, no per-tool or per-resource scope
-- **Mitigation:** Scoped credentials with audience validation, principle of least privilege, secrets transmitted via side channels
+**Key threats include:**
+- **Dynamic Capability Injection** - Servers changing tools without notification
+- **Tool Shadowing** - Malicious tools overshadowing legitimate ones
+- **Confused Deputy Problem** - Privileged servers tricked by less-privileged entities
+- **Malicious Tool Definitions** - Tool descriptors manipulating agent behavior
+- **Sensitive Information Leaks** - Tools receiving/exfiltrating sensitive data
+- **No Per-Tool Authorization** - Coarse-grained auth only
 
 ### Multi-Layered Defense Strategy
 

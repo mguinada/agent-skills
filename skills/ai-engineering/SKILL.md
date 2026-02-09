@@ -1,6 +1,9 @@
 ---
 name: ai-engineering
 description: Guide for building effective AI agents and agentic workflows. Use when designing, building, or debugging agentic systems - including choosing the right agentic pattern (workflows vs agents), implementing prompt chaining/routing/parallelization/orchestrator-workers/evaluator-optimizer workflows, building autonomous agents with tools, designing Agent-Computer Interfaces (ACI) and tool specifications, or troubleshooting/optimizing existing agent implementations. Covers augmented LLMs, agentic workflows, and autonomous agents based on production patterns.
+author: mguinada
+version: 1.0.0
+tags: [agents, ai, workflows, mcp, aci, prompt-engineering, tool-design]
 ---
 
 # AI Engineering
@@ -124,6 +127,18 @@ results = [execute(s) for s in subtasks]
 # Orchestrator synthesizes
 final = llm(f"Synthesize results: {results}")
 ```
+
+## Error Handling & Guardrails
+
+Guardrails are a layered defense. No single layer is sufficient—combine multiple specialized checks for resilient agents.
+
+**Layered Defense Pattern:**
+```
+Input → Relevance Check → Safety Filter → Agent → Tool Safeguards → Output Validation → Response
+            ↓block          ↓block                  ↓risk-rating          ↓block
+```
+
+For a complete implementation with code examples and tests, see **[references/agent-design.md](references/agent-design.md#implementation-example)**.
 
 ## Agent Design
 

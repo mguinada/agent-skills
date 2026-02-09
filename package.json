@@ -1,0 +1,24 @@
+{
+  "name": "agent-skills",
+  "version": "1.0.0",
+  "description": "Collection of AI agent skills following the Agent Skills format",
+  "scripts": {
+    "eval": "node scripts/evaluate-agent-skills.mjs",
+    "eval:all": "node scripts/evaluate-agent-skills.mjs all",
+    "eval:review": "node scripts/evaluate-agent-skills.mjs all review",
+    "eval:llm": "node scripts/evaluate-agent-skills.mjs all llm",
+    "eval:llm:single": "node scripts/evaluate-agent-skills.mjs",
+    "tessl": "npx tessl"
+  },
+  "devDependencies": {
+    "@tessl/cli": "latest"
+  },
+  "keywords": [
+    "agent-skills",
+    "ai",
+    "skills",
+    "claude"
+  ],
+  "author": "mguinada",
+  "license": "MIT"
+}

@@ -1,6 +1,9 @@
 ---
 name: create-pr
 description: Creates GitHub pull requests with properly formatted titles. Use when creating PRs, submitting changes for review, or when the user says /pr or asks to create a pull request. Analyzes changes on the current branch and uses the pull request template from .github folder.
+author: mguinada
+version: 1.0.0
+tags: [git, pr, pull-request, github, workflow]
 ---
 
 # Create Pull Request

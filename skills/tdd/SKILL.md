@@ -1,6 +1,6 @@
 ---
 name: TDD
-description: Guide Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring. Identifies test improvement opportunities and applies pytest best practices.
+description: Guide Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring. Identifies test improvement opportunities and applies pytest best practices. Use when writing tests, implementing features, or following TDD methodology.
 author: AINA Project
 version: 2.0.0
 tags: [TDD, test driven development, testing, red-green-refactor, pytest, code-quality, coverage]

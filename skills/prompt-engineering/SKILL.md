@@ -1,6 +1,9 @@
 ---
 name: prompt-engineering
 description: Guide for generating effective prompts when building agentic systems. Use when the user asks to create, generate, or design prompts for AI agents, especially for tool-using agents, planning agents, or autonomous systems.
+author: mguinada
+version: 1.0.0
+tags: [prompts, agents, ai, prompt-engineering, techniques]
 ---
 
 # Prompt Engineering for Agentic Systems
