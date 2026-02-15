@@ -1,6 +1,6 @@
 ---
 name: git-commit
-description: Generate concise, descriptive git commit messages following best practices. Use when creating git commits from staged changes, crafting commit messages, or reviewing commit message quality. Use when the user says /commit or asks to create a git commit.
+description: "Generate concise, descriptive git commit messages following best practices. Use when creating git commits from staged changes, crafting commit messages, or reviewing commit message quality. Use when the user says /commit or asks to create a git commit. **PROACTIVE ACTIVATION**: Auto-invoke when staged changes detected or user asks to commit/save work. **DETECTION**: Run git status - if staged changes exist, offer to commit. User says \"commit\", \"save\", \"done with feature\". **USE CASES**: Staged changes detected, work completed, user wants to save progress."
 author: mguinada
 version: 1.0.0
 tags: [git, commit, workflow, best-practices]
@@ -8,8 +8,11 @@ tags: [git, commit, workflow, best-practices]
 
 # Git Commit
 
-Generate concise and descriptive git commit messages based on staged code changes.
-Analyze staged changes and recent commit history to generate a well-crafted commit message.
+## Overview
+
+Generate concise, descriptive git commit messages based on staged code changes. Analyzes staged changes and recent commit history to craft well-structured messages following best practices.
+
+> **When work is ready for review**, use the **create-pr skill** to create a pull request.
 
 ## Commit Message Format
 

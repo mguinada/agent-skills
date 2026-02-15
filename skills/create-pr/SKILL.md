@@ -1,6 +1,6 @@
 ---
 name: create-pr
-description: Creates GitHub pull requests with properly formatted titles. Use when creating PRs, submitting changes for review, or when the user says /pr or asks to create a pull request. Analyzes changes on the current branch and uses the pull request template from .github folder.
+description: "Creates GitHub pull requests with properly formatted titles. Use when creating PRs, submitting changes for review, or when the user says /pr or asks to create a pull request. Analyzes changes on the current branch and uses the pull request template from .github folder. **PROACTIVE ACTIVATION**: Auto-invoke when commits exist on feature branch and user mentions PR, review, or push. **DETECTION**: Check for unpushed commits, feature branch (not main/master), user asks to share/review changes. **USE CASES**: Code is ready for review, after completing feature work, user wants to share changes."
 author: mguinada
 version: 1.0.0
 tags: [git, pr, pull-request, github, workflow]
@@ -8,9 +8,13 @@ tags: [git, pr, pull-request, github, workflow]
 
 # Create Pull Request
 
+## Overview
+
 Creates GitHub pull requests with properly formatted titles using the project's PR template.
 
-Do not add "Co-Authored-By", "Generated with" or any type of references to the AI model unless explicitly instructed by the user.
+> **Before creating a PR**, staged changes must be committed first using the **git-commit skill**.
+
+**Note:** Do not add "Co-Authored-By", "Generated with" or any AI model references unless explicitly instructed by the user.
 
 ## Workflow
 

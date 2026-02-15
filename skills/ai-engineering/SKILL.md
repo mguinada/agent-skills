@@ -1,6 +1,6 @@
 ---
 name: ai-engineering
-description: Guide for building effective AI agents and agentic workflows. Use when designing, building, or debugging agentic systems - including choosing the right agentic pattern (workflows vs agents), implementing prompt chaining/routing/parallelization/orchestrator-workers/evaluator-optimizer workflows, building autonomous agents with tools, designing Agent-Computer Interfaces (ACI) and tool specifications, or troubleshooting/optimizing existing agent implementations. Covers augmented LLMs, agentic workflows, and autonomous agents based on production patterns.
+description: "Build AI agents and agentic workflows. Use when designing/building/debugging agentic systems: choosing workflows vs agents, implementing prompt patterns (chaining/routing/parallelization/orchestrator-workers/evaluator-optimizer), building autonomous agents with tools, designing ACI/tool specs, or troubleshooting/optimizing implementations. **PROACTIVE ACTIVATION**: Auto-invoke when building agentic applications, designing workflows vs agents, or implementing agent patterns. **DETECTION**: Check for agent code (MCP servers, tool defs, .mcp.json configs), or user mentions of \"agent\", \"workflow\", \"agentic\", \"autonomous\". **USE CASES**: Designing agentic systems, choosing workflows vs agents, implementing prompt patterns, building agents with tools, designing ACI/tool specs, troubleshooting/optimizing agents."
 author: mguinada
 version: 1.0.0
 tags: [agents, ai, workflows, mcp, aci, prompt-engineering, tool-design]
@@ -8,7 +8,11 @@ tags: [agents, ai, workflows, mcp, aci, prompt-engineering, tool-design]
 
 # AI Engineering
 
+## Overview
+
 Build effective agentic systems using proven patterns. Start simple, add complexity only when needed.
+
+> **For specialized prompt design guidance** (techniques, patterns, examples for agentic systems), see the **prompt-engineering skill**.
 
 ## Core Principle
 
@@ -77,6 +81,40 @@ All autonomous agents operate on a continuous cyclical process. Understanding th
 
 This "Think, Act, Observe" cycle continues until the mission is complete or an exit condition is reached.
 
+**Code example (Think, Act, Observe with tools):**
+```python
+import anthropic
+
+client = anthropic.Anthropic()
+
+def agent_loop(mission: str, max_iterations: int = 10):
+    """Run the Think-Act-Observe loop until mission complete."""
+    context = f"Mission: {mission}\nAvailable tools: search, read_page, finish"
+
+    for i in range(max_iterations):
+        # THINK: LLM analyzes current state and plans next action
+        response = client.messages.create(
+            model="claude-sonnet-4-5-20250929",
+            messages=[{"role": "user", "content": context}],
+            tools=[search_tool, read_page_tool, finish_tool]
+        )
+
+        # Extract the model's reasoning and intended action
+        for block in response.content:
+            if block.type == "text":
+                print(f"Thought: {block.text}")
+            elif block.type == "tool_use" and block.name == "search":
+                # ACT: Execute the tool
+                result = search(block.input["query"])
+                # OBSERVE: Add result to context, loop continues
+                context += f"\nObservation: {result}"
+            elif block.type == "tool_use" and block.name == "finish":
+                # EXIT: Mission complete
+                return block.input["summary"]
+
+    return "Max iterations reached"
+```
+
 ## Pattern Selection Guide
 
 | Pattern | Use When | Key Benefit |
@@ -126,6 +164,47 @@ results = [execute(s) for s in subtasks]
 
 # Orchestrator synthesizes
 final = llm(f"Synthesize results: {results}")
+```
+
+**Code example (Prompt Chaining - complete):**
+```python
+import anthropic
+
+client = anthropic.Anthropic()
+
+def analyze_document(text: str) -> str:
+    """Complete prompt chaining: extract → summarize → recommend."""
+
+    # STEP 1: Extract key entities
+    step1 = client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        messages=[{
+            "role": "user",
+            "content": f"Extract all entities (people, orgs, dates) from:\n{text}"
+        }]
+    )
+    entities = step1.content[0].text
+
+    # STEP 2: Summarize using extracted entities
+    step2 = client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        messages=[{
+            "role": "user",
+            "content": f"Summarize this document using these entities: {entities}\n\nDocument: {text}"
+        }]
+    )
+    summary = step2.content[0].text
+
+    # STEP 3: Generate recommendations based on summary
+    step3 = client.messages.create(
+        model="claude-sonnet-4-5-20250929",
+        messages=[{
+            "role": "user",
+            "content": f"Based on this summary, provide 3 actionable recommendations:\n{summary}"
+        }]
+    )
+
+    return step3.content[0].text
 ```
 
 ## Error Handling & Guardrails

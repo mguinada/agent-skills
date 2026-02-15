@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: Refactor code to make architecture and implementation simpler using TDD methodology. Preserves functionality through tests. Use when simplifying complex code, improving architecture, or reducing technical debt.
+description: "TDD-based code simplification that preserves behavior through tests. Use Red-Green-Refactor cycles to simplify code one test-verified change at a time. **DISTINCT FROM**: General code review or AI rewriting—this skill requires existing tests and only proceeds when tests confirm behavior is preserved. **PROACTIVE**: Auto-invoke when test-covered code has complexity (functions >50 lines, high cyclomatic complexity, duplication) and user wants to simplify it safely. Trigger phrases: 'clean up code', 'make code simpler', 'reduce complexity', 'refactoring help'. **NOT FOR**: Adding features or fixing bugs—use /tdd skill instead."
 author: AINA Project
 version: 1.0.0
 tags: [refactoring, tdd, code-quality, simplification]
@@ -10,22 +10,12 @@ tags: [refactoring, tdd, code-quality, simplification]
 
 ## Overview
 
-This skill refactors code to make architecture and implementation simpler while **preserving all functionality**. It follows Test-Driven Development (TDD) methodology.
+**Language Agnostic**: Examples use Python; port to your project's language.
 
 **Core Principles:**
-- Functionality is preserved through comprehensive tests
-- Changes are made in small, incremental iterations
-- Each iteration follows a full TDD cycle (Red-Green-Refactor)
-- All tests, type checks, and lint checks must pass before completion
-
-## When to Use
-
-Invoke this skill when:
-- Code has become complex or difficult to understand
-- Functions or classes have multiple responsibilities
-- Code smells are detected (duplication, long functions, etc.)
-- Architecture needs simplification
-- You want to improve maintainability without changing behavior
+- Functionality preserved through tests
+- Small, incremental iterations
+- All checks must pass before completion
 
 ## Prerequisites
 
@@ -41,14 +31,7 @@ Invoke this skill when:
 ### Phase 1: Analysis
 
 1. **Read the target code** thoroughly to understand its purpose
-2. **Identify code smells**:
-   - Functions with multiple responsibilities
-   - Duplicated code
-   - Magic numbers or hardcoded values
-   - Complex conditional logic
-   - Poor naming or unclear intent
-   - Missing type hints
-   - Business logic mixed with I/O
+2. **Identify code smells** - see [code-smells.md](references/code-smells.md) for detection patterns
 3. **List refactoring opportunities** (wait for user approval before implementing)
 
 ### Phase 2: TDD Cycle for Each Change
@@ -94,151 +77,48 @@ This runs:
 
 **Repeat** until all checks pass with no errors.
 
-## Code Smells to Detect
-
-| Smell | Detection | Refactoring |
-|-------|-----------|-------------|
-| Long function | >20 lines or multiple responsibilities | Extract smaller functions |
-| Duplicated code | Similar logic in multiple places | Extract to shared function |
-| Magic numbers | Hardcoded numeric values | Replace with named constants |
-| Poor naming | Unclear variable/function names | Use descriptive names |
-| Mutable defaults | Default args like `[]` or `{}` | Use `None` and initialize inside |
-| Mixed concerns | Business logic with I/O | Separate into layers |
-| Missing types | Functions without type hints | Add comprehensive type hints |
-| Complex conditionals | Nested if/else logic | Use guard clauses or pattern matching |
-| Imperative style | Manual loops, mutations | Use functional patterns |
-
 ## Refactoring Patterns
 
-### Single Responsibility Principle
+For common refactoring patterns with before/after examples, see [patterns.md](references/patterns.md).
 
-Extract functions so each has one clear purpose:
-
-```python
-# Before - Multiple responsibilities
-def process_order(items, tax_rate, user):
-    subtotal = sum(item.price for item in items)
-    tax = subtotal * tax_rate
-    total = subtotal + tax
-    send_email(user.email, f"Order total: {total}")
-    update_inventory(items)
-    return total
-
-# After - Single responsibilities
-def calculate_subtotal(items: list[Item]) -> float:
-    return sum(item.price for item in items)
-
-def calculate_tax(subtotal: float, tax_rate: float) -> float:
-    return subtotal * tax_rate
-
-def calculate_total(items: list[Item], tax_rate: float) -> float:
-    subtotal = calculate_subtotal(items)
-    return subtotal + calculate_tax(subtotal, tax_rate)
-```
-
-### Replace Magic Numbers with Constants
-
-```python
-# Before
-def calculate_total(items):
-    return sum(item.price for item in items) * 1.08
-
-# After
-DEFAULT_TAX_RATE = 0.08
-
-def calculate_total(items: list[Item]) -> float:
-    return sum(item.price for item in items) * (1 + DEFAULT_TAX_RATE)
-```
-
-### Prefer Functional Patterns
-
-```python
-# Before - Imperative
-result = []
-for item in items:
-    if item.is_active:
-        result.append(item.price)
-
-# After - Functional
-def get_active_item_prices(items: list[Item]) -> Iterator[float]:
-    return (item.price for item in items if item.is_active)
-```
-
-### Separate Business Logic from I/O
-
-```python
-# Before - Mixed concerns
-def process_user(user_id):
-    user = db.query(User).get(user_id)
-    formatted = f"Name: {user.name}, Email: {user.email}"
-    print(formatted)
-
-# After - Separated
-def format_user_info(user: User) -> str:
-    return f"Name: {user.name}, Email: {user.email}"
-
-def display_user(user_id: int) -> None:
-    user = db.query(User).get(user_id)
-    print(format_user_info(user))
-```
-
-## Verification Commands
-
-```bash
-# Run tests
-uv run pytest
-
-# Run specific test file
-uv run pytest tests/agents/test_email.py
-
-# Run tests with coverage
-uv run pytest --cov=src --cov-report=term-missing
-
-# Run lint checks
-uv run ruff check src/
-
-# Run type checks
-uv run mypy src/
-
-# Run all checks (full CI pipeline)
-bin/ci-local
-```
+**Includes:** Prompt refactoring patterns for code that contains prompts or prompt templates.
 
 ## Examples
 
-### Example 1: Extract Function for Single Responsibility
+### Inline: Extract Function
 
-**Iteration 1:**
-1. 🔴 Write test for extracted function behavior
-2. 🟢 Extract function and make test pass
-3. 🔵 Verify all existing tests still pass
-4. ✅ Run `bin/ci-local`
+**Before** - complex function with embedded calculation:
 
-**Iteration 2:**
-1. Extract next piece of logic
-2. Run tests after extraction
-3. Continue until all responsibilities separated
+```python
+def generate_report(users, threshold):
+    result = []
+    for user in users:
+        score = user.login_count * 0.3 + user.posts * 0.7
+        if score >= threshold:
+            result.append({"name": user.name, "score": score})
+    return result
+```
 
-### Example 2: Replace Magic Numbers
+**After** - extracted calculation improves readability and testability:
 
-**Iteration 1:**
-1. Identify magic number (e.g., `0.08` for tax rate)
-2. Add constant: `DEFAULT_TAX_RATE = 0.08`
-3. Replace usage with constant
-4. Run tests to verify
+```python
+def calculate_engagement_score(user) -> float:
+    return user.login_count * 0.3 + user.posts * 0.7
 
-**Iteration 2:**
-1. Find next magic number
-2. Extract to constant
-3. Run tests to verify
-4. Continue until no magic numbers remain
+def generate_report(users, threshold):
+    result = []
+    for user in users:
+        score = calculate_engagement_score(user)
+        if score >= threshold:
+            result.append({"name": user.name, "score": score})
+    return result
+```
 
-## Important Notes
+**Single Iteration Pattern:**
 
-1. **Never skip tests**: Always run tests after each change
-2. **One change at a time**: Make smallest possible changes
-3. **Functionality preserved**: If tests pass, behavior is preserved
-4. **Ask for approval**: List opportunities, wait before implementing
-5. **Don't remove code**: Never remove unrelated functionality
+1. 🔴 Write test for simplified behavior (if adding new behavior)
+2. 🟢 Make minimal changes to pass tests
+3. 🔵 Simplify while tests stay green
+4. ✅ Run `bin/ci-local` to verify all checks pass
 
-
+Repeat for each discrete improvement.

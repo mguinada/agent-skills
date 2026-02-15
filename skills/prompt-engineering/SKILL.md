@@ -1,6 +1,6 @@
 ---
 name: prompt-engineering
-description: Guide for generating effective prompts when building agentic systems. Use when the user asks to create, generate, or design prompts for AI agents, especially for tool-using agents, planning agents, or autonomous systems.
+description: "Creates system prompts, writes tool descriptions, and structures agent instructions for agentic systems. Use when the user asks to create, generate, or design prompts for AI agents, especially for tool-using agents, planning agents, or autonomous systems. **PROACTIVE ACTIVATION**: Auto-invoke when designing prompts for agents, tools, or agentic workflows in AI projects. **DETECTION**: Check for agent/tool-related code, prompt files, or user mentions of \"prompt\", \"agent\", \"LLM\". **USE CASES**: Designing system prompts, tool descriptions, agent instructions, prompt optimization, reducing hallucinations."
 author: mguinada
 version: 1.0.0
 tags: [prompts, agents, ai, prompt-engineering, techniques]
@@ -17,6 +17,8 @@ Generate optimized prompts for agentic systems with clear rationale for techniqu
 - **Trade-offs matter** - Always consider cost, latency, and accuracy when selecting techniques
 - **Structure over verbosity** - Well-organized prompts outperform long unstructured ones
 - **Test and iterate** - Verify prompts work before deploying to production
+
+> **For broader agentic system design** (choosing workflows vs agents, ACI/tool specifications, guardrails, multi-agent patterns), see the **ai-engineering skill**.
 
 ## When to Use
 
@@ -54,8 +56,6 @@ When you have enough information, provide a final summary.
 Stop when you have answered the user's question or gathered sufficient information.
 ```
 
-**Why ReAct works**: Couples reasoning with action in a loop, enabling autonomous tool use
-
 ---
 
 ### Scenario 2: Planning Agent (Tree of Thoughts)
@@ -86,8 +86,6 @@ Approach 3: [description]
 
 Then select the best approach and explain your reasoning.
 ```
-
-**Why Tree of Thoughts works**: Explores alternatives before committing, enables strategic decision-making
 
 ---
 
@@ -120,8 +118,6 @@ Output: {"valid": false, "reason": "missing @ symbol"}
 Input: {user_input}
 ```
 
-**Why Few-Shot works**: Examples establish patterns; negative examples prevent common mistakes
-
 ---
 
 ### Scenario 4: Factual Accuracy (Chain-of-Verification)
@@ -149,8 +145,6 @@ Answer each verification question factually...
 ## STEP 4: Final Answer
 Refine your original answer based on verification results...
 ```
-
-**Why CoVe works**: Models are more accurate answering focused verification questions than complex original queries
 
 ---
 
@@ -181,8 +175,6 @@ Recommend: microservices or monolith for our startup?
 - Explain reasoning
 ```
 
-**Why Structured Thinking works**: Forces thinking in explicit phases, reducing jumping to conclusions
-
 ---
 
 ### Scenario 6: Self-Improving Output (Self-Refine)
@@ -205,8 +197,6 @@ Identify 3-5 improvements needed:
 ## STEP 3: Refinement
 Rewrite addressing all identified improvements...
 ```
-
-**Why Self-Refine works**: Model critiques and improves its own output, often higher quality than single-pass
 
 ---
 
