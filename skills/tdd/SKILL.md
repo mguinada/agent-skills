@@ -1,6 +1,6 @@
 ---
-name: TDD
-description: Guide Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring. Identifies test improvement opportunities and applies pytest best practices. Use when writing tests, implementing features, or following TDD methodology.
+name: tdd
+description: "Guide Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring. Identifies test improvement opportunities and applies pytest best practices. Use when writing tests, implementing features, or following TDD methodology. **PROACTIVE ACTIVATION**: Auto-invoke when implementing features or fixing bugs in projects with test infrastructure (pytest files, tests/ directory). **DETECTION**: Check for tests/ directory, pytest.ini, pyproject.toml with pytest config, or test files. **USE CASES**: Writing production code, fixing bugs, adding features, legacy code characterization."
 author: AINA Project
 version: 2.0.0
 tags: [TDD, test driven development, testing, red-green-refactor, pytest, code-quality, coverage]
@@ -10,23 +10,7 @@ tags: [TDD, test driven development, testing, red-green-refactor, pytest, code-q
 
 ## Overview
 
-This skill guides the complete Test-Driven Development (TDD) workflow using the Red-Green-Refactor cycle. It handles new features, bug fixes, legacy code, and identifies opportunities to refactor existing tests.
-
-**Core Principles:**
-- **Test First**: Never write production code without a failing test
-- **One Test at a Time**: Focus on one failing test before moving to the next
-- **Baby Steps**: Make the smallest possible changes to move from red to green
-- **Continuous Improvement**: Regularly identify and implement test quality improvements
-- **Fast Feedback**: Run tests frequently to maintain development flow
-
-## When to Use
-
-Invoke this skill when:
-- Implementing a new feature or function
-- Fixing a bug (write reproducing test first)
-- Adding tests to legacy code
-- Reviewing code for test refactoring opportunities
-- Improving existing test quality and organization
+Guides Test-Driven Development workflow: Red-Green-Refactor cycle for new features, bug fixes, legacy code, and test refactoring.
 
 ## Development Scenarios
 
@@ -36,83 +20,59 @@ Follow the Red-Green-Refactor cycle:
 
 #### 🔴 RED - Write a Failing Test
 
-1. **Understand requirements** before writing any code
-2. **Write the smallest test** that defines the desired behavior
-3. **Run the test** to confirm it fails for the expected reason
-4. **Do NOT write** any production code until you have a failing test
+1. Write the smallest test defining desired behavior
+2. Run test to confirm failure
 
 ```bash
-# Write the test first
-# Then run it to confirm failure
 uv run pytest tests/feature/test_new_function.py -v
 ```
 
 #### 🟢 GREEN - Make the Test Pass
 
-1. **Write minimal production code** to make the test pass
-2. **Focus on making it work**, not making it perfect
-3. **Avoid over-engineering** at this stage
-4. **Run the test** to confirm it passes
-5. **Iterate** until all tests pass
+1. Write minimal production code to pass
+2. Run test to confirm passes
+3. Iterate until all tests pass
 
 ```bash
-# Run the specific test
 uv run pytest tests/feature/test_new_function.py::test_new_function -v
-
-# Run full suite when green
 uv run pytest
 ```
 
 #### 🔵 REFACTOR - Improve the Code
 
-1. **Clean up both test and production code**
-2. **Remove duplication** and improve design
-3. **Apply design patterns** and best practices
-4. **Ensure all tests still pass** after refactoring
-5. **List refactoring opportunities** (see Refactoring Opportunities section)
+1. Clean up test and production code
+2. Ensure tests still pass
+3. List refactoring opportunities (see [Test Refactoring Opportunities](#test-refactoring-opportunities))
 
 ```bash
-# Verify after refactoring
 uv run pytest --cov=src --cov-report=term-missing
 ```
 
 ### 2. Bug Fixes
 
-**Critical**: Never fix a bug without writing a test first.
+Never fix a bug without writing a test first.
 
-1. **Write a test that reproduces the bug**
-2. **Verify the test fails** (Red phase)
-3. **Fix the bug** in the implementation
-4. **Run tests**, iterate until green
-5. **Check for refactoring opportunities**
+1. Write test reproducing bug, verify fails
+2. Fix bug in implementation
+3. Run tests until green
+4. Check refactoring opportunities
 
 ```python
-# Example: Bug fix workflow
-# RED - Write failing test that reproduces bug
 def test_calculate_total_with_negative_price_raises_error():
     items = [Item("Coke", -1.50)]
     with pytest.raises(ValueError, match="Price cannot be negative"):
         calculate_total(items)
-
-# Verify it fails first
-# Then implement fix
-# Then verify test passes
 ```
 
 ### 3. Legacy Code
 
-When adding tests to untested code:
-
-1. **Write characterization tests** that capture current behavior
-2. **Run tests to establish baseline**
-3. **Make small changes** with test coverage
-4. **Refactor incrementally** with test safety net
+1. Write characterization tests capturing current behavior
+2. Run tests to establish baseline
+3. Make small changes with test coverage
+4. Refactor incrementally
 
 ```bash
-# Start with characterization tests
 uv run pytest tests/legacy/test_old_module.py -v
-
-# Add coverage incrementally
 uv run pytest --cov=src/legacy_module --cov-report=term-missing
 ```
 
@@ -148,90 +108,12 @@ When refactoring existing tests:
    - Medium impact changes (consolidating test files)
    - Complex changes last (large file reorganization)
 
-3. **Apply refactoring patterns** (see Patterns section)
+3. **Apply refactoring patterns** (see [patterns.md](references/patterns.md))
 
 4. **Verify coverage maintained or improved**:
    ```bash
    uv run pytest --cov=src --cov-report=term-missing
    ```
-
-## Refactoring Patterns
-
-### Parametrization
-
-Replace multiple similar tests with a single parametrized test.
-
-**Before**:
-```python
-def test_create_model_groq():
-    """Test creating a Groq model."""
-    with patch("agno.models.groq.Groq", create=True):
-        result = create_model(ModelProvider.GROQ, "llama-3.3-70b")
-        assert result is not None
-
-def test_create_model_openrouter():
-    """Test creating an OpenRouter model."""
-    with patch("agno.models.openrouter.OpenRouter", create=True):
-        result = create_model(ModelProvider.OPENROUTER, "deepseek/r1")
-        assert result is not None
-```
-
-**After**:
-```python
-@pytest.mark.parametrize("provider,model_class,base_id", [
-    (ModelProvider.GROQ, "agno.models.groq.Groq", "llama-3.3-70b"),
-    (ModelProvider.OPENROUTER, "agno.models.openrouter.OpenRouter", "deepseek/r1"),
-], ids=["groq", "openrouter"])
-def test_create_model_for_providers(provider, model_class, base_id):
-    """Test creating models for all providers."""
-    with patch(model_class, create=True):
-        result = create_model(provider, base_id)
-        assert result is not None
-```
-
-### Shared Fixtures
-
-Extract duplicated fixtures to `tests/conftest.py`.
-
-**Before** (duplicated in multiple files):
-```python
-# In test_file1.py
-@pytest.fixture
-def sample_token():
-    return "123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
-
-# In test_file2.py
-@pytest.fixture
-def sample_token():
-    return "123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
-```
-
-**After** (in `tests/conftest.py`):
-```python
-@pytest.fixture
-def sample_token() -> str:
-    """Provide sample Telegram bot token for testing."""
-    return "123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
-```
-
-### Custom Markers
-
-Use markers for test categorization.
-
-```python
-@pytest.mark.slow
-def test_heavy_computation():
-    result = perform_heavy_calculation()
-    assert result > 0
-
-@pytest.mark.integration
-def test_database_connection():
-    db = connect_to_database()
-    assert db.is_connected()
-
-# Run fast tests only: pytest -m "not slow"
-# Run integration tests: pytest -m integration
-```
 
 ## Verification Checklist
 
@@ -251,30 +133,7 @@ bin/ci-local
 
 ## Best Practices
 
-### Test Writing
-
-- **Use descriptive test names**: `test_<function>_<scenario>_<expected_result>`
-- **Focus on behavior**, not implementation details
-- **Don't test private methods**
-- **Use meaningful assertions** with clear error messages
-- **Keep tests independent** and isolated
-- **Avoid A/A/A comments** - test structure should be self-evident
-
-### Test Organization
-
-- **Place fixtures first** at the top of test files
-- **Mirror source structure** in test directory layout
-- **Group related tests** in classes or modules
-- **Use appropriate fixture scopes** (function, class, module, session)
-- **Parametrized tests last** in the file
-
-### Code Quality
-
-- **Use type hints** for all test function parameters
-- **Use f-strings** for string formatting
-- **Follow PEP 8** naming conventions
-- **Use Google-style docstrings** for test classes
-- **Never use mutable default arguments**
+See [best-practices.md](references/best-practices.md) for test writing, organization, and code quality guidelines.
 
 ## Verification Commands
 
@@ -309,16 +168,3 @@ uv run pytest -m "not slow"
 4. **Maintain Coverage**: Coverage must never decrease during refactoring
 5. **Small Changes**: Make incremental changes and run tests frequently
 6. **List Refactoring Opportunities**: After green, identify but wait for user request before implementing
-
-## Expected Outcomes
-
-Following TDD methodology:
-
-| Practice | Outcome |
-|----------|---------|
-| Test-first development | Better design, fewer bugs |
-| Red-Green-Refactor cycle | Maintainable, clean code |
-| One test at a time | Faster feedback, easier debugging |
-| Test refactoring | 15-25% reduction in test redundancy |
-| Coverage maintenance | Consistent or improved test coverage |
-
