@@ -6,7 +6,9 @@
       "WebSearch",
       "Bash(DEBUG_LLM=1 npm run eval:*)",
       "Bash(npm run eval:*)",
-      "Bash(npm run eval:all:*)"
+      "Bash(npm run eval:all:*)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs"
     ]
   }
 }
