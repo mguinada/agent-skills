@@ -29,6 +29,14 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ---
 
+### Phoenix Observability
+
+**Use when:** Debugging LLM applications with detailed traces, running evaluations on datasets, monitoring production AI systems, setting up observability infrastructure for agentic systems, or configuring OpenTelemetry instrumentation. Triggers on arize-phoenix imports, OpenTelemetry setup, or observability-related code.
+
+**Scope:** Open-source AI observability platform for LLM tracing, evaluation, and monitoring. Covers Phoenix installation and launch, OpenTelemetry-based tracing (manual and automatic), evaluation framework with LLM-as-judge, storage backends (SQLite for development, PostgreSQL for production), Docker deployment, and comprehensive framework integrations (DSPy, LangChain, LlamaIndex, Agno, AutoGen, CrewAI, and more).
+
+---
+
 ### Prompt Engineering for Agentic Systems
 
 **Use when:** Creating prompts for AI agents, especially for tool-using agents, planning agents, data processing agents, or when reducing hallucinations in fact-based tasks.
