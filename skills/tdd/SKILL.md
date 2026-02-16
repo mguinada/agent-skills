@@ -1,7 +1,7 @@
 ---
 name: tdd
 description: "Guide Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring. Identifies test improvement opportunities and applies pytest best practices. Use when writing tests, implementing features, or following TDD methodology. **PROACTIVE ACTIVATION**: Auto-invoke when implementing features or fixing bugs in projects with test infrastructure (pytest files, tests/ directory). **DETECTION**: Check for tests/ directory, pytest.ini, pyproject.toml with pytest config, or test files. **USE CASES**: Writing production code, fixing bugs, adding features, legacy code characterization."
-author: AINA Project
+author: mguinada
 version: 2.0.0
 tags: [TDD, test driven development, testing, red-green-refactor, pytest, code-quality, coverage]
 ---

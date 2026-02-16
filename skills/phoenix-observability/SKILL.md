@@ -1,7 +1,7 @@
 ---
 name: phoenix-observability
 description: "Open-source AI observability platform for LLM tracing, evaluation, and monitoring. Use when debugging LLM applications with detailed traces, running evaluations on datasets, monitoring production AI systems, or setting up observability infrastructure for agentic systems. **PROACTIVE ACTIVATION**: Auto-invoke when implementing observability/tracing for LLM agents, setting up evaluation pipelines, or configuring OpenTelemetry instrumentation. **DETECTION**: Check for arize-phoenix imports, OpenTelemetry setup, or observability-related code. **USE CASES**: Debugging LLM apps, running evaluations, monitoring production systems, setting up tracing infrastructure, instrumenting agent frameworks."
-author: AINA Project
+author: mguinada
 version: 1.0.0
 tags: [observability, phoenix, arize, tracing, evaluation, monitoring, llm-ops, opentelemetry, agents]
 ---
