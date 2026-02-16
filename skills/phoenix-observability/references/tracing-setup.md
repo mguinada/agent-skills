@@ -38,6 +38,67 @@ tracer_provider = register(
 
 Use manual instrumentation for custom logic or when automatic instrumentation is unavailable.
 
+### Framework-Agnostic Decorator Tracing
+
+For **custom agentic systems** that don't use a framework, `openinference-instrumentation` provides decorators that simplify manual instrumentation:
+
+```bash
+pip install openinference-instrumentation
+```
+
+The `@tracer.agent`, `@tracer.chain`, and `@tracer.tool` decorators wrap any Python function to capture agent steps, tool calls, and chain logic with full OpenTelemetry-compatible tracing.
+
+```python
+from openinference.instrumentation import Instrumentor
+from phoenix.otel import register
+
+# Setup
+tracer_provider = register(project_name="custom-agent")
+
+# Create instrumentor with decorators
+instrumentor = Instrumentor(tracer_provider=tracer_provider)
+
+# Trace an entire agent loop
+@instrumentor.agent  # Captures full agent execution
+def research_agent(query: str) -> str:
+    """Custom agent with manual tool dispatch."""
+    context = search_tool(query)
+    answer = synthesize_tool(context, query)
+    return answer
+
+# Trace individual tools
+@instrumentor.tool  # Captures tool inputs/outputs
+def search_tool(query: str) -> list:
+    """Search vector database for relevant context."""
+    return vector_store.search(query, top_k=5)
+
+@instrumentor.tool
+def synthesize_tool(context: list, query: str) -> str:
+    """Generate response using retrieved context."""
+    return llm.generate(query, context)
+
+# Trace chain steps
+@instrumentor.chain  # Captures sequential chain execution
+def rag_chain(question: str) -> str:
+    """Simple RAG chain."""
+    docs = retriever.retrieve(question)
+    return generator(question, docs)
+
+# Run your traced agent
+result = research_agent("What is Phoenix observability?")
+```
+
+**When to use decorators:**
+- Building custom agent loops without LangChain/LlamaIndex
+- Implementing tool dispatchers or orchestration logic
+- Adding tracing to existing code without refactoring
+- Preference for decorators over context managers
+
+**Decorator differences:**
+- `@tracer.agent` - Full agent execution with nested tool calls
+- `@tracer.chain` - Sequential chain of operations
+- `@tracer.tool` - Individual function/tool with input/output capture
+
 ### Basic Manual Tracing
 
 ```python

@@ -1,6 +1,6 @@
 ---
 name: phoenix-observability
-description: "Open-source AI observability platform for LLM tracing, evaluation, and monitoring. Use when debugging LLM applications with detailed traces, running evaluations on datasets, monitoring production AI systems, or setting up observability infrastructure for agentic systems. **PROACTIVE ACTIVATION**: Auto-invoke when implementing observability/tracing for LLM agents, setting up evaluation pipelines, or configuring OpenTelemetry instrumentation. **DETECTION**: Check for arize-phoenix imports, OpenTelemetry setup, or observability-related code. **USE CASES**: Debugging LLM apps, running evaluations, monitoring production systems, setting up tracing infrastructure, instrumenting agent frameworks."
+description: "Open-source AI observability platform for LLM tracing, evaluation, and monitoring. Use when debugging LLM applications with detailed traces, running evaluations on datasets, monitoring production AI systems, or setting up observability infrastructure for agentic systems. **PROACTIVE ACTIVATION**: Auto-invoke when implementing observability/tracing for LLM agents, setting up evaluation pipelines, or configuring OpenTelemetry instrumentation. **DETECTION**: Check for arize-phoenix imports, OpenTelemetry setup, or observability-related code. **USE CASES**: Debugging LLM apps, running evaluations, monitoring production systems, setting up tracing infrastructure, instrumenting agent frameworks, tracing custom agents with decorators (@tracer.agent, @tracer.chain, @tracer.tool)."
 author: mguinada
 version: 1.0.0
 tags: [observability, phoenix, arize, tracing, evaluation, monitoring, llm-ops, opentelemetry, agents]
@@ -84,6 +84,33 @@ response = client.chat.completions.create(
 )
 ```
 
+### Custom Agents with Decorators
+
+For framework-agnostic agentic systems, use `@tracer.agent`, `@tracer.chain`, and `@tracer.tool` decorators:
+
+```python
+from openinference.instrumentation import Instrumentor
+from phoenix.otel import register
+
+tracer_provider = register(project_name="custom-agent")
+instrumentor = Instrumentor(tracer_provider=tracer_provider)
+
+@instrumentor.agent
+def my_agent(query: str) -> str:
+    context = search_tool(query)
+    return synthesize_tool(context, query)
+
+@instrumentor.tool
+def search_tool(query: str) -> list:
+    return vector_store.search(query)
+
+@instrumentor.tool
+def synthesize_tool(context: list, query: str) -> str:
+    return llm.generate(query, context)
+```
+
+For detailed tracing patterns, see [tracing-setup.md](references/tracing-setup.md).
+
 ## Storage Backends
 
 Phoenix supports both SQLite and PostgreSQL for persistent storage:
@@ -103,8 +130,9 @@ For containerized deployment, see [docker-deployment.md](references/docker-deplo
 ## Tracing Setup
 
 For comprehensive tracing setup with OpenTelemetry, see [tracing-setup.md](references/tracing-setup.md):
-- Manual instrumentation patterns
-- Automatic instrumentation with framework-specific libraries
+- **Framework-agnostic decorators**: `@tracer.agent`, `@tracer.chain`, `@tracer.tool` for custom agents
+- Manual instrumentation with OpenTelemetry API
+- Automatic instrumentation for LLM frameworks
 - Distributed tracing for multi-service applications
 - Custom span attributes and context propagation
 
