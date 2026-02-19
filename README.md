@@ -167,3 +167,14 @@ npx skills add https://github.com/vercel-labs/skills --skill find-skills
 ```bash
 npx skills add anthropics/claude-code
 ```
+
+**[Phoenix Skills](https://github.com/Arize-ai/phoenix)**
+
+```bash
+# Individual skills
+npx skills add https://github.com/Arize-ai/phoenix/skills --skill phoenix-tracing
+npx skills add https://github.com/Arize-ai/phoenix/skills --skill phoenix-evals
+npx skills add https://github.com/Arize-ai/phoenix/skills --skill phoenix-cli
+```
+
+> **Note:** `phoenix-tracing` may overlap with the `phoenix-observability` skill included in this repository.
