@@ -1,0 +1,40 @@
+{
+  "skill_name": "agents-md-creator",
+  "evals": [
+    {
+      "id": 1,
+      "name": "create-new-monorepo-agents-md",
+      "prompt": "Create an AGENTS.md file for this Turborepo monorepo. It has apps/web (Next.js frontend), apps/api (Express backend), and packages/ui (shared components). The project uses pnpm workspaces.",
+      "expected_output": "A well-structured AGENTS.md with:\n- Project description\n- Essential commands table\n- Monorepo structure table with actual package names detected\n- Progressive disclosure with reference index entries\n- No hardcoded @repo/api or @repo/web — uses detected names\n- Proper multi-entry indexing (start/middle/end)",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "optimize-bloated-agents-md",
+      "prompt": "This AGENTS.md is 2000+ lines and includes detailed build steps, extensive debugging guides, and historical decisions. Optimize it using progressive disclosure.",
+      "expected_output": "Optimized AGENTS.md that:\n- Moves detailed SOPs to docs/references/\n- Keeps only high-frequency info in Level 1\n- Has trigger conditions for all references\n- Includes multi-entry reference tables\n- Has information recording principles section\n- No mention of line counts or percentages",
+      "files": ["AGENTS.md"]
+    },
+    {
+      "id": 3,
+      "name": "detect-project-structure",
+      "prompt": "Analyze this project and determine if it's a monorepo or polyrepo. Show your detection evidence and confidence level.",
+      "expected_output": "Analysis that shows:\n- Checks for apps/, packages/, services/ directories\n- Checks for workspace configs (pnpm-workspace.yaml, etc.)\n- Checks for monorepo build systems (turbo.json, nx.json, lerna.json)\n- Provides confidence level (High/Medium/Low)\n- Lists detected packages with their actual names\n- Asks for user confirmation if confidence is not High",
+      "files": ["package.json", "pnpm-workspace.yaml"]
+    },
+    {
+      "id": 4,
+      "name": "flexible-package-naming",
+      "prompt": "Create an AGENTS.md for a monorepo where the backend is called 'apps/backend' (not @repo/api) and there's also 'apps/admin' for the admin dashboard.",
+      "expected_output": "AGENTS.md that:\n- Uses actual detected package names (apps/backend, apps/admin)\n- Does NOT assume @repo/api or @repo/web naming\n- Shows flexible package name detection\n- Has correct commands for the actual package names",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "progressive-disclosure-references",
+      "prompt": "I'm adding a new feature that requires database migration. The current AGENTS.md doesn't have database info. Add it appropriately using progressive disclosure.",
+      "expected_output": "Addition that:\n- Assesses if database info is high-frequency (likely yes for dev)\n- If high-frequency: adds essential info to Level 1\n- Creates detailed migration guide in docs/references/migration.md\n- Adds proper trigger condition to Level 1\n- Includes content summary in the reference",
+      "files": ["AGENTS.md"]
+    }
+  ]
+}

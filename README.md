@@ -168,6 +168,30 @@ npx skills add https://github.com/vercel-labs/skills --skill find-skills
 npx skills add anthropics/claude-code
 ```
 
+**[Ruby on Rails](npx skills add NeverSight/learn-skills.dev)**
+
+```bash
+npx skills add NeverSight/learn-skills.dev --skill rails
+```
+
+REST APIs
+
+**[RESTful HATEOAS](https://skills.sh/pproenca/dot-skills/restful-hateoas)**
+
+Note: rails oriented but can be used as a general REST API design skill with HATEOAS principles.
+
+```bash
+npx skills add https://github.com/pproenca/dot-skills --skill restful-hateoas
+```
+
+[rest-api-design-patterns](https://skills.sh/manutej/luxor-claude-marketplace/rest-api-design-patterns)
+
+Note: examples in python (FastAPI) and JS (Express.js) but principles can be applied to any REST API design.
+
+```bash
+npx skills add https://github.com/manutej/luxor-claude-marketplace --skill rest-api-design-patterns
+```
+
 **[Phoenix Skills](https://github.com/Arize-ai/phoenix)**
 
 ```bash
