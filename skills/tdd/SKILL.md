@@ -1,170 +1,329 @@
 ---
 name: tdd
-description: "Guide Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring. Identifies test improvement opportunities and applies pytest best practices. Use when writing tests, implementing features, or following TDD methodology. **PROACTIVE ACTIVATION**: Auto-invoke when implementing features or fixing bugs in projects with test infrastructure (pytest files, tests/ directory). **DETECTION**: Check for tests/ directory, pytest.ini, pyproject.toml with pytest config, or test files. **USE CASES**: Writing production code, fixing bugs, adding features, legacy code characterization."
+description: "Guide Test-Driven Development workflow (Red-Green-Refactor) for new features, bug fixes, and refactoring. Supports both Python (pytest) and Ruby (RSpec). Use when writing tests, implementing features, or following TDD methodology. **PROACTIVE ACTIVATION**: Auto-invoke when implementing features or fixing bugs in projects with test infrastructure. **DETECTION**: Check for tests/ directory, pytest.ini, pyproject.toml with pytest config, spec/ directory, .rspec file, or *_spec.rb files. **USE CASES**: Writing production code, fixing bugs, adding features, legacy code characterization."
 author: mguinada
-version: 2.0.0
-tags: [TDD, test driven development, testing, red-green-refactor, pytest, code-quality, coverage]
+version: 2.3.0
+tags: [TDD, test driven development, testing, red-green-refactor, rspec, pytest, code-quality, coverage]
 ---
 
-# Test-Driven Development Skill
+# Test-Driven Development
 
-## Overview
+Guide for Red-Green-Refactor workflow. Supports Python (pytest) and Ruby (RSpec).
 
-Guides Test-Driven Development workflow: Red-Green-Refactor cycle for new features, bug fixes, legacy code, and test refactoring.
+## Quick Reference
 
-## Development Scenarios
+| | Python (pytest) | Ruby (RSpec) |
+|---|---|---|
+| **Naming** | `test_<fn>_<scenario>_<expected>` | `describe ".method"` / `"#method"` |
+| **Structure** | Mirror `src/` in `tests/` | One expectation per `it` |
+| **Data** | `@pytest.fixture` + type hints | `let` / `let!` |
+| **Variants** | `@pytest.mark.parametrize` | `context` blocks |
+| **Exceptions** | `pytest.raises(Error, match=)` | `expect { }.to raise_error` |
+| **Run** | `uv run pytest` | `bundle exec rspec` |
+| **Lint** | `uv run ruff check src/` | `bundle exec rubocop` |
 
-### 1. New Feature Development
+---
 
-Follow the Red-Green-Refactor cycle:
+## The Cycle
 
-#### 🔴 RED - Write a Failing Test
+### 🔴 RED → Write a failing test
 
-1. Write the smallest test defining desired behavior
-2. Run test to confirm failure
+Write the smallest test that defines the desired behavior. Confirm it fails.
 
-```bash
-uv run pytest tests/feature/test_new_function.py -v
-```
+### 🟢 GREEN → Make it pass
 
-#### 🟢 GREEN - Make the Test Pass
+Write minimal production code. Run tests until they pass.
 
-1. Write minimal production code to pass
-2. Run test to confirm passes
-3. Iterate until all tests pass
+### 🔵 REFACTOR → Improve
 
-```bash
-uv run pytest tests/feature/test_new_function.py::test_new_function -v
-uv run pytest
-```
+Clean up test and production code. Ensure tests still pass.
 
-#### 🔵 REFACTOR - Improve the Code
+> **Use the `refactor` skill** for systematic code improvement during this phase.
 
-1. Clean up test and production code
-2. Ensure tests still pass
-3. List refactoring opportunities (see [Test Refactoring Opportunities](#test-refactoring-opportunities))
+---
 
-```bash
-uv run pytest --cov=src --cov-report=term-missing
-```
+## Scenarios
 
-### 2. Bug Fixes
+### New Feature
 
-Never fix a bug without writing a test first.
+Follow the Red-Green-Refactor cycle. Start with one test, make it pass, then add the next.
 
-1. Write test reproducing bug, verify fails
-2. Fix bug in implementation
-3. Run tests until green
-4. Check refactoring opportunities
+<details>
+<summary>Example: Testing a new function</summary>
 
+**Python:**
 ```python
-def test_calculate_total_with_negative_price_raises_error():
-    items = [Item("Coke", -1.50)]
+import pytest
+from src.cart import calculate_total, Item
+
+
+class TestCalculateTotal:
+    @pytest.mark.parametrize("items,expected", [
+        ([], 0.0),
+        ([Item("Coke", 1.50)], 1.50),
+    ], ids=["empty", "single"])
+    def test_with_valid_items_returns_total(
+        self, items: list[Item], expected: float
+    ) -> None:
+        assert calculate_total(items) == expected
+
+    def test_with_negative_price_raises_error(self) -> None:
+        with pytest.raises(ValueError, match="Price cannot be negative"):
+            calculate_total([Item("Coke", -1.50)])
+```
+
+**Ruby:**
+```ruby
+RSpec.describe Cart do
+  describe '#calculate_total' do
+    subject { described_class.calculate_total(items) }
+
+    context 'when cart is empty' do
+      let(:items) { [] }
+      it { is_expected.to eq(0.0) }
+    end
+
+    context 'when item has negative price' do
+      let(:items) { [Item.new(name: 'Coke', price: -1.50)] }
+      it { expect { subject }.to raise_error(ArgumentError, /Price cannot be negative/) }
+    end
+  end
+end
+```
+</details>
+
+### Bug Fix
+
+**Never fix a bug without writing a test first.**
+
+1. Write test reproducing the bug
+2. Confirm test fails
+3. Fix the bug
+4. Confirm test passes
+
+<details>
+<summary>Example: Bug fix test</summary>
+
+**Python:**
+```python
+def test_calculate_total_with_negative_price_raises_value_error(self) -> None:
+    """Regression test for issue #123: negative prices should raise."""
+    items = [Item(name="Coke", price=-1.50)]
     with pytest.raises(ValueError, match="Price cannot be negative"):
         calculate_total(items)
 ```
 
-### 3. Legacy Code
+**Ruby:**
+```ruby
+context 'when item has negative price' do
+  # Regression test for issue #123
+  let(:items) { [Item.new(name: 'Coke', price: -1.50)] }
+
+  it 'raises ArgumentError' do
+    expect { subject }.to raise_error(ArgumentError, /Price cannot be negative/)
+  end
+end
+```
+</details>
+
+### Legacy Code
 
 1. Write characterization tests capturing current behavior
 2. Run tests to establish baseline
 3. Make small changes with test coverage
 4. Refactor incrementally
 
-```bash
-uv run pytest tests/legacy/test_old_module.py -v
-uv run pytest --cov=src/legacy_module --cov-report=term-missing
-```
+---
 
-## Test Refactoring Opportunities
+## Refactoring Opportunities
 
-After each TDD cycle (or when reviewing existing tests), search for these improvement opportunities:
+After each cycle, check for:
 
-### Identify Opportunities
+**Implementation:**
+- Duplicate logic → Consolidate
+- Long functions → Break down
+- Unclear naming → Rename
+- Complex conditionals → Simplify
 
-Check for:
+**Tests:**
+- Redundant tests → Parametrize
+- Duplicate fixtures → Extract to shared
+- Testing private methods → Test public interface instead
+- Vague assertions → Make specific
 
-- **Redundant tests**: Similar test logic that can be consolidated with parametrization
-- **Duplicate fixtures**: Common test data defined in multiple files
-- **Missing parametrization**: Multiple tests for similar scenarios
-- **File organization**: Tests that could be better consolidated
-- **Best practice violations**: Testing private methods, vague assertions, etc.
-- **Slow tests**: Tests that could be optimized or marked with `@pytest.mark.slow`
-- **Hardcoded values**: Test data that should use fixtures or factories
-
-### Refactoring Process
-
-When refactoring existing tests:
-
-1. **Capture baseline metrics**:
-   ```bash
-   bin/ci-local 2>&1 | tee baseline.txt
-   grep "passed" baseline.txt  # Note test count
-   grep "Cover" baseline.txt   # Note coverage %
-   ```
-
-2. **Prioritize changes** by impact and isolation:
-   - High impact, isolated changes first (parametrization, shared fixtures)
-   - Medium impact changes (consolidating test files)
-   - Complex changes last (large file reorganization)
-
-3. **Apply refactoring patterns** (see [patterns.md](references/patterns.md))
-
-4. **Verify coverage maintained or improved**:
-   ```bash
-   uv run pytest --cov=src --cov-report=term-missing
-   ```
-
-## Verification Checklist
-
-After completing TDD cycles or test refactoring, verify:
-
-- [ ] **All tests pass**: `uv run pytest`
-- [ ] **Coverage maintained or improved**: `uv run pytest --cov=src --cov-report=term-missing`
-- [ ] **No mypy errors**: `uv run mypy src/`
-- [ ] **No ruff errors**: `uv run ruff check src/`
-- [ ] **Tests execute faster**: `uv run pytest --durations=10`
-
-For complete verification, run the full CI pipeline:
-
-```bash
-bin/ci-local
-```
+---
 
 ## Best Practices
 
-See [best-practices.md](references/best-practices.md) for test writing, organization, and code quality guidelines.
+<details>
+<summary><strong>Python (pytest)</strong></summary>
 
-## Verification Commands
+### Organization
+- `test_*.py` naming, mirror `src/` structure
+- Group related tests in classes
 
-```bash
-# Run all tests
-uv run pytest
+### Naming
+```python
+# Good
+def test_calculate_tax_with_negative_amount_raises_value_error():
+    pass
 
-# Run specific test file
-uv run pytest tests/models/test_registry.py -v
-
-# Run specific test
-uv run pytest tests/test_file.py::TestClass::test_function -vv
-
-# Run with coverage
-uv run pytest --cov=src --cov-report=term-missing --cov-report=html
-
-# Run full CI pipeline
-bin/ci-local
-
-# Check test execution time
-uv run pytest --durations=10
-
-# Run fast tests only
-uv run pytest -m "not slow"
+# Bad - too vague
+def test_calculate_tax():  # ❌
+    pass
 ```
 
-## Important Notes
+### Fixtures
+```python
+@pytest.fixture
+def sample_user() -> dict[str, str]:
+    """Provide sample user data."""
+    return {"id": "123", "name": "John Doe"}
+```
 
-1. **Test First**: Always write tests before implementation
-2. **Verify Red Phase**: Confirm tests fail before writing implementation
-3. **One at a Time**: Focus on one failing test before moving to the next
-4. **Maintain Coverage**: Coverage must never decrease during refactoring
-5. **Small Changes**: Make incremental changes and run tests frequently
-6. **List Refactoring Opportunities**: After green, identify but wait for user request before implementing
+### Parametrization
+```python
+@pytest.mark.parametrize("input,expected", [
+    (0, 0), (1, 1), (2, 4),
+], ids=["zero", "one", "two"])
+def test_square(input: int, expected: int) -> None:
+    assert square(input) == expected
+```
+
+### Exceptions
+```python
+def test_divide_by_zero_raises_error() -> None:
+    with pytest.raises(ValueError, match="Cannot divide by zero"):
+        divide(10, 0)
+```
+
+### Mocking
+```python
+def test_fetch_user(mocker) -> None:
+    mock_get = mocker.patch('requests.get')
+    mock_get.return_value.json.return_value = {"id": 1}
+
+    result = fetch_user(1)
+
+    mock_get.assert_called_once_with("https://api.example.com/users/1")
+```
+
+</details>
+
+<details>
+<summary><strong>Ruby (RSpec)</strong></summary>
+
+### Structure
+- Test class methods (`.method`) before instance methods (`#method`)
+- One expectation per `it` block
+
+```ruby
+RSpec.describe User do
+  describe '.find' do
+    # Class methods first
+  end
+
+  describe '#full_name' do
+    # Instance methods second
+  end
+end
+```
+
+### Test Variables
+Use `let` instead of instance variables:
+```ruby
+# Good
+let(:user) { described_class.new(name: "John") }
+
+# Bad
+before { @user = User.new(name: "John") }  # ❌
+```
+
+### Subject
+```ruby
+describe '#full_name' do
+  subject { user.full_name }
+  it { is_expected.to eq "John Doe" }
+end
+```
+
+### Predicate Matchers
+```ruby
+# Good
+it { is_expected.to be_admin }
+
+# Bad
+it "returns true" do
+  expect(subject.admin?).to be true  # ❌
+end
+```
+
+### Doubles
+```ruby
+# Good
+let(:notifier) { instance_double(Notifier) }
+
+# Bad
+let(:notifier) { double("notifier") }  # ❌
+```
+
+### Private Methods
+Don't test private methods unless explicitly required. Test the public interface.
+
+</details>
+
+---
+
+## Verification
+
+<details>
+<summary><strong>Python (pytest) Commands</strong></summary>
+
+```bash
+uv run pytest                              # All tests
+uv run pytest tests/models/test_user.py -v # Specific file
+uv run pytest tests/test_file.py::TestClass::test_fn -vv  # Specific test
+uv run pytest --cov=src --cov-report=term-missing  # With coverage
+uv run pytest --durations=10               # Check timing
+uv run pytest -m "not slow"                # Fast tests only
+uv run mypy src/                           # Type check
+uv run ruff check src/                     # Lint
+```
+</details>
+
+<details>
+<summary><strong>Ruby (RSpec) Commands</strong></summary>
+
+```bash
+bundle exec rspec                              # All tests
+bundle exec rspec spec/models/user_spec.rb     # Specific file
+bundle exec rspec spec/models/user_spec.rb:42  # Specific line
+bundle exec rspec --format documentation       # Doc format
+COVERAGE=true bundle exec rspec                # With coverage
+bundle exec rspec --profile                    # Check timing
+bundle exec rspec --tag ~slow                  # Fast tests only
+bundle exec rubocop                            # Lint
+bundle exec rubocop --autocorrect              # Auto-fix
+```
+</details>
+
+---
+
+## Checklist
+
+| | Python | Ruby |
+|---|---|---|
+| Tests pass | `uv run pytest` | `bundle exec rspec` |
+| Coverage ok | `uv run pytest --cov=src` | `COVERAGE=true bundle exec rspec` |
+| No lint errors | `uv run ruff check src/` | `bundle exec rubocop` |
+| Types check | `uv run mypy src/` | — |
+
+---
+
+## Key Principles
+
+1. **Test First** — Write tests before implementation
+2. **Verify Red** — Confirm tests fail before implementing
+3. **One at a Time** — Focus on one failing test
+4. **Maintain Coverage** — Never decrease coverage
+5. **Small Changes** — Incremental changes, run tests frequently
