@@ -145,7 +145,7 @@ npx tessl skill review skills/*/
 ## Installation
 
 ```bash
-npx skills add mguinada/agent-skills
+npx skills add mguinada/ai-coding-toolkit
 ```
 
 ## Third party skills you may want to install
