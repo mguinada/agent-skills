@@ -327,3 +327,4 @@ bundle exec rubocop --autocorrect              # Auto-fix
 3. **One at a Time** — Focus on one failing test
 4. **Maintain Coverage** — Never decrease coverage
 5. **Small Changes** — Incremental changes, run tests frequently
+6. **Refactor Systematically** — Use the `refactor` skill during the refactor phase
