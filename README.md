@@ -69,6 +69,14 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ---
 
+### Ruby on Rails
+
+**Use when:** Building Rails applications, working with controllers, models, migrations, routes, Active Job, Active Record, validations, associations, or API-only apps. Triggers on Rails generators, scaffold, migrate, ActiveRecord queries, controller actions, routing config, background jobs, or any Rails-specific development task.
+
+**Scope:** Comprehensive Rails development guide with progressive disclosure. Covers controllers (filters, strong parameters, rendering), models (Active Record CRUD, validations, associations, callbacks, scopes), migrations (creating tables, indexes, foreign keys), routing (resource routing, namespaces, constraints), Active Job (background jobs, queues, retries), and API-only applications (JSON rendering, versioning, authentication, serialization).
+
+---
+
 ## Skill Evaluation
 
 This project includes multiple ways to evaluate Agent Skills quality and format compliance.
