@@ -77,6 +77,14 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ---
 
+### TypeScript
+
+**Use when:** Working with TypeScript types, generics, type errors, tsconfig issues, module resolution, JS→TS migration, type performance, monorepo setup, or any TypeScript-related question. Triggers on .ts/.tsx files, tsconfig.json, types/ directory, @types/ packages, or TypeScript-related imports.
+
+**Scope:** TypeScript expert guidance for type-level programming, performance optimization, migrations, and real-world problem solving. Covers type patterns (branded types, conditional types, template literals), performance optimization (skipLibCheck, incremental, project references), type testing with Vitest, declaration files, monorepo configuration (Turborepo vs Nx), and tooling decisions (Biome vs ESLint). Includes progressive disclosure with detailed reference files.
+
+---
+
 ## Skill Evaluation
 
 This project includes multiple ways to evaluate Agent Skills quality and format compliance.
