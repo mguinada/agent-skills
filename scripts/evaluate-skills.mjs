@@ -6,12 +6,12 @@
  * Validates Agent Skills format (SKILL.md) skills.
  *
  * Usage:
- *   node scripts/evaluate-agent-skills.mjs              # List all skills
- *   node scripts/evaluate-agent-skills.mjs all          # Lint all skills
- *   node scripts/evaluate-agent-skills.mjs all review   # Detailed review all skills
- *   node scripts/evaluate-agent-skills.mjs <skill-name> # Lint specific skill
- *   node scripts/evaluate-agent-skills.mjs <skill-name> review # Review specific skill
- *   node scripts/evaluate-agent-skills.mjs <skill-name> llm    # LLM evaluation
+ *   node scripts/evaluate-skills.mjs              # List all skills
+ *   node scripts/evaluate-skills.mjs all          # Lint all skills
+ *   node scripts/evaluate-skills.mjs all review   # Detailed review all skills
+ *   node scripts/evaluate-skills.mjs <skill-name> # Lint specific skill
+ *   node scripts/evaluate-skills.mjs <skill-name> review # Review specific skill
+ *   node scripts/evaluate-skills.mjs <skill-name> llm    # LLM evaluation
  */
 
 import { readFileSync, readdirSync, existsSync } from 'fs';

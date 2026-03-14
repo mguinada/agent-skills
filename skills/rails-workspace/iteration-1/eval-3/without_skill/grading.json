@@ -1,0 +1,61 @@
+{
+  "eval_id": 3,
+  "eval_name": "api-endpoint",
+  "run_id": "eval-3-without_skill",
+  "grading_timestamp": "2026-03-14T20:10:00Z",
+  "expectations": [
+    {
+      "text": "Controller file exists",
+      "passed": true,
+      "evidence": "File products_controller.rb exists"
+    },
+    {
+      "text": "Uses API-only pattern (ActionController::API or namespaced)",
+      "passed": true,
+      "evidence": "Inherits from ActionController::API directly"
+    },
+    {
+      "text": "Renders JSON",
+      "passed": true,
+      "evidence": "Code contains: render json: { products: ..., meta: ... }"
+    },
+    {
+      "text": "Has pagination",
+      "passed": true,
+      "evidence": "Code contains: Product.page(page).per(per_page)"
+    },
+    {
+      "text": "Has authentication via X-API-Key",
+      "passed": true,
+      "evidence": "Code contains: request.headers['X-API-Key']"
+    },
+    {
+      "text": "Uses before_action",
+      "passed": true,
+      "evidence": "Code contains: before_action :authenticate_request"
+    },
+    {
+      "text": "Has index action",
+      "passed": true,
+      "evidence": "Code contains: def index"
+    },
+    {
+      "text": "API namespace in routes",
+      "passed": true,
+      "evidence": "Routes use namespace :api with namespace :v1"
+    },
+    {
+      "text": "Pagination headers included",
+      "passed": false,
+      "evidence": "Pagination meta is in JSON body, not headers"
+    },
+    {
+      "text": "Secure API key comparison",
+      "passed": true,
+      "evidence": "Uses ActiveSupport::SecurityUtils.secure_compare for timing attack prevention"
+    }
+  ],
+  "passed_count": 9,
+  "total_count": 10,
+  "pass_rate": 90.0
+}

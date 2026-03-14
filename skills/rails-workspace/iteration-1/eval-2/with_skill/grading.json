@@ -1,0 +1,56 @@
+{
+  "eval_id": 2,
+  "eval_name": "controller-with-routes",
+  "run_id": "eval-2-with_skill",
+  "grading_timestamp": "2026-03-14T20:10:00Z",
+  "expectations": [
+    {
+      "text": "Controller file exists",
+      "passed": true,
+      "evidence": "File registrations_controller.rb exists"
+    },
+    {
+      "text": "Has new action",
+      "passed": true,
+      "evidence": "Code contains: def new"
+    },
+    {
+      "text": "Has create action",
+      "passed": true,
+      "evidence": "Code contains: def create"
+    },
+    {
+      "text": "Has update action",
+      "passed": true,
+      "evidence": "Code contains: def update"
+    },
+    {
+      "text": "Uses strong parameters",
+      "passed": true,
+      "evidence": "Code contains: params.expect(user: [:email, :password, :password_confirmation, :name])"
+    },
+    {
+      "text": "Inherits from ApplicationController",
+      "passed": true,
+      "evidence": "Code contains: class RegistrationsController < ApplicationController"
+    },
+    {
+      "text": "Handles validation errors",
+      "passed": true,
+      "evidence": "Code contains: render :new, status: :unprocessable_entity"
+    },
+    {
+      "text": "Routes configured",
+      "passed": true,
+      "evidence": "File routes.rb exists with resources :registrations"
+    },
+    {
+      "text": "Uses before_action for DRY code",
+      "passed": true,
+      "evidence": "Code contains: before_action :set_user, only: [:update]"
+    }
+  ],
+  "passed_count": 9,
+  "total_count": 9,
+  "pass_rate": 100.0
+}

@@ -1,124 +1,116 @@
 ---
 name: refactor
-description: "TDD-based code simplification that preserves behavior through tests. Use Red-Green-Refactor cycles to simplify code one test-verified change at a time. **DISTINCT FROM**: General code review or AI rewriting—this skill requires existing tests and only proceeds when tests confirm behavior is preserved. **PROACTIVE**: Auto-invoke when test-covered code has complexity (functions >50 lines, high cyclomatic complexity, duplication) and user wants to simplify it safely. Trigger phrases: 'clean up code', 'make code simpler', 'reduce complexity', 'refactoring help'. **NOT FOR**: Adding features or fixing bugs—use /tdd skill instead."
+description: "TDD-based code refactoring preserving behavior through tests. Use Red-Green-Refactor cycles to apply refactoring patterns one test-verified change at a time. **TRIGGERS**: 'clean up code', 'make code simpler', 'reduce complexity', 'refactor this', 'apply DRY', 'extract method', 'remove duplication'. **DISTINCT FROM**: Adding features (use /tdd) or fixing bugs. **PROACTIVE**: Auto-invoke when test-covered code has complexity (functions >50 lines, high cyclomatic complexity, duplication)."
 author: mguinada
-version: 1.0.0
-tags: [refactoring, tdd, code-quality, simplification]
+version: 2.0.0
+tags: [refactoring, tdd, code-quality, simplification, clean-code]
 ---
 
 # Refactor Skill
 
-## Overview
+## Quick Reference
 
-**Language Agnostic**: Examples use Python; port to your project's language.
+### Code Smells Reference
 
-**Core Principles:**
-- Functionality preserved through tests
-- Small, incremental iterations
-- All checks must pass before completion
+| Smell | Detection | Refactoring |
+|-------|-----------|-------------|
+| Long function | >20 lines | Extract Method |
+| Duplicated code | Similar logic | Extract Method, Pull Up |
+| Long parameter list | >3 params | Introduce Parameter Object |
+| Large class | >10 methods | Extract Class |
+| Feature envy | Method uses other class | Move Method |
+| Switch statements | Type checking | Replace with Polymorphism |
+| Speculative generality | Unused abstractions | Inline, Collapse Hierarchy |
+| Message chains | a.b.c.d | Hide Delegate |
+| Middle man | Excessive delegation | Remove Middle Man |
+| Incomplete library class | Missing methods | Introduce Foreign Method |
+
+### Process
+
+```
+1. VERIFY  - Tests exist and pass
+2. ANALYZE - Identify code smells (see references/code-smells.md)
+3. SELECT  - Choose appropriate pattern (see references/catalog.md)
+4. APPLY   - One small step at a time
+5. VERIFY  - Run tests after each change
+6. REPEAT  - Until clean
+```
+
+## TDD Cycle
+
+For each discrete refactoring:
+
+```
+🔴 RED    - If adding behavior, write failing test first
+🟢 GREEN  - Make minimal changes to pass tests
+🔵 REFACTOR - Apply pattern while keeping tests green
+✅ VERIFY - Run tests, lint, type check
+```
+
+---
 
 ## Prerequisites
 
-**Before starting refactoring:**
+1. **Tests must exist** - If no tests, write them first
+2. **Tests must pass** - Run tests before starting
+3. **Understand the code** - Read and comprehend behavior
 
-1. **Tests must exist**: If no tests exist for the code, request them first
-2. **Tests must pass**: Verify `uv run pytest` passes before starting
-3. **Understand the code**: Read and understand what the code does
-4. **Create a backup**: Optionally commit current state before changes
+## Verification Commands
 
-## Refactoring Process
-
-### Phase 1: Analysis
-
-1. **Read the target code** thoroughly to understand its purpose
-2. **Identify code smells** - see [code-smells.md](references/code-smells.md) for detection patterns
-3. **List refactoring opportunities** (wait for user approval before implementing)
-
-### Phase 2: TDD Cycle for Each Change
-
-For **each discrete refactoring iteration**:
-
-#### 🔴 RED (if applicable)
-- If adding new simplified behavior, write a failing test first
-- If only simplifying existing code, skip to GREEN phase
-- Run tests to confirm the new test fails
-
-#### 🟢 GREEN
-- Make **minimal changes** to pass the tests
-- Focus on making tests pass, not perfection
-- Run `uv run pytest` after each small change
-- Iterate until tests are green
-
-#### 🔵 REFACTOR
-- Apply simplification while keeping tests green
-- Extract functions, improve naming, reduce complexity
-- **Continuously run tests** after each small change
-- Never batch multiple changes - one small step at a time
-
-#### ✅ VERIFY
-- Run `uv run pytest` to ensure all tests pass
-- Run `uv run ruff check src/` for lint checks
-- Run `uv run mypy src/` for type checks
-- If any check fails, fix and repeat verification
-
-### Phase 3: Final Verification
-
-After all refactoring iterations complete:
-
+**Python:**
 ```bash
-# Run full CI pipeline until everything passes
-bin/ci-local
+pytest              # Run tests
+ruff check src/     # Lint
+mypy src/           # Type check
 ```
 
-This runs:
-1. Lint checks (`ruff`)
-2. Static type checks (`mypy`)
-3. Tests with coverage (`pytest`)
-
-**Repeat** until all checks pass with no errors.
-
-## Refactoring Patterns
-
-For common refactoring patterns with before/after examples, see [patterns.md](references/patterns.md).
-
-**Includes:** Prompt refactoring patterns for code that contains prompts or prompt templates.
-
-## Examples
-
-### Inline: Extract Function
-
-**Before** - complex function with embedded calculation:
-
-```python
-def generate_report(users, threshold):
-    result = []
-    for user in users:
-        score = user.login_count * 0.3 + user.posts * 0.7
-        if score >= threshold:
-            result.append({"name": user.name, "score": score})
-    return result
+**Ruby:**
+```bash
+rspec               # Run tests
+rubocop             # Lint
+steep check         # Type check (if using Steep)
 ```
 
-**After** - extracted calculation improves readability and testability:
+---
 
-```python
-def calculate_engagement_score(user) -> float:
-    return user.login_count * 0.3 + user.posts * 0.7
+## Refactoring Checklist
 
-def generate_report(users, threshold):
-    result = []
-    for user in users:
-        score = calculate_engagement_score(user)
-        if score >= threshold:
-            result.append({"name": user.name, "score": score})
-    return result
+```markdown
+- [ ] Function does one thing only (SRP)
+- [ ] Function name clearly describes intent
+- [ ] Function is 20 lines or fewer
+- [ ] 3 or fewer parameters
+- [ ] No duplicate code (DRY)
+- [ ] If nesting is 2 levels or fewer
+- [ ] No magic numbers
+- [ ] Self-documenting code
+- [ ] Tests pass
+- [ ] Lint passes
+- [ ] Type check passes
 ```
 
-**Single Iteration Pattern:**
+## Constraints
 
-1. 🔴 Write test for simplified behavior (if adding new behavior)
-2. 🟢 Make minimal changes to pass tests
-3. 🔵 Simplify while tests stay green
-4. ✅ Run `bin/ci-local` to verify all checks pass
+**MUST:**
+- Write/run tests before refactoring
+- Change one thing at a time
+- Preserve behavior exactly
 
-Repeat for each discrete improvement.
+**MUST NOT:**
+- Refactor + add features simultaneously
+- Refactor without tests
+- Batch multiple refactorings
+
+---
+
+## References
+
+- **[Code Smells Guide](references/code-smells.md)** - Detection patterns and fixes for all code smells
+- **[Refactoring Catalog](references/catalog.md)** - Complete catalog with Ruby/Python examples
+- **[Advanced Patterns](references/patterns.md)** - SOLID refactorings, prompt patterns, functional patterns
+
+## External Resources
+
+- [Refactoring (Martin Fowler)](https://refactoring.com/)
+- [Catalog of Refactorings](https://refactoring.com/catalog/)
+- [Clean Code (Robert C. Martin)](https://www.oreilly.com/library/view/clean-code-a/9780136083238/)

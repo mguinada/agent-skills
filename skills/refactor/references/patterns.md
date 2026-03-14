@@ -1,15 +1,14 @@
 # Refactoring Patterns Reference
 
-Common refactoring patterns with before/after examples.
-
-**Language Agnostic**: Examples use Python syntax; port to your project's language while preserving the underlying patterns and principles.
+Supplementary patterns for specialized refactoring scenarios.
 
 ## Prompt Refactoring Patterns
 
-When code contains prompts or prompt templates, apply these patterns to simplify and maintain clarity.
+When code contains prompts or prompt templates, apply these patterns.
 
 ### Extract Prompt Template
 
+**Python:**
 ```python
 # Before - Prompt embedded in code
 def generate_response(topic):
@@ -32,139 +31,422 @@ def generate_response(topic: str) -> str:
     return llm.complete(EXPERT_SYSTEM_PROMPT.format(topic=topic))
 ```
 
-### Extract Few-Shot Examples
+**Ruby:**
+```ruby
+# Before - Prompt embedded in code
+def generate_response(topic)
+  prompt = "You are an expert on #{topic}. Please provide a detailed explanation
+of the key concepts, history, and modern applications. Include specific examples
+and make it accessible to beginners."
+  llm.complete(prompt)
+end
 
-```python
-# Before - Examples inline with prompt
-def classify_sentiment(text):
-    prompt = f"""Classify the sentiment as positive, negative, or neutral.
+# After - Extracted template
+EXPERT_SYSTEM_PROMPT = <<~PROMPT
+  You are an expert on %{topic}.
 
-Example 1: "I love this product!" -> positive
-Example 2: "This is terrible." -> negative
-Example 3: "It's okay, nothing special." -> neutral
+  Provide a detailed explanation covering:
+  - Key concepts
+  - Historical context
+  - Modern applications
 
-Input: "{text}"
-Classification:"""
-    return llm.complete(prompt)
+  Include specific examples and keep it accessible to beginners.
+PROMPT
 
-# After - Examples extracted separately
-SENTIMENT_EXAMPLES = [
-    ("I love this product!", "positive"),
-    ("This is terrible.", "negative"),
-    ("It's okay, nothing special.", "neutral"),
-]
-
-def build_few_shot_prompt(examples: list[tuple[str, str]], input_text: str) -> str:
-    """Build a few-shot prompt from example pairs."""
-    examples_text = "\n".join(
-        f'Example {i+1}: "{input_text}" -> {label}'
-        for i, (input_text, label) in enumerate(examples)
-    )
-    return f"""Classify the sentiment as positive, negative, or neutral.
-
-{examples_text}
-
-Input: "{input_text}"
-Classification:"""
-
-def classify_sentiment(text: str) -> str:
-    return llm.complete(build_few_shot_prompt(SENTIMENT_EXAMPLES, text))
-```
-
-### Simplify Prompt Output Format
-
-```python
-# Before - Complex parsing logic required
-def extract_entities(text):
-    prompt = f"""Extract all entities from the following text. Return them in
-any format you like, just make sure to include the entity type and value.
-
-Text: {text}"""
-    response = llm.complete(prompt)
-    # Complex parsing needed...
-    return parse_entities(response)
-
-# After - Structured output request
-def extract_entities(text: str) -> list[dict]:
-    prompt = f"""Extract all entities from the following text.
-
-Return JSON array with {{"type": "...", "value": "..."}} format.
-
-Text: {text}"""
-    response = llm.complete(prompt)
-    return json.loads(response)
+def generate_response(topic)
+  llm.complete(EXPERT_SYSTEM_PROMPT % { topic: topic })
+end
 ```
 
 ---
 
-## Single Responsibility Principle
+### Extract Few-Shot Examples
 
-Extract functions so each has one clear purpose:
+**Python:**
+```python
+# Before - Examples inline
+def classify_sentiment(text):
+    prompt = f"""Classify sentiment.
 
+Example 1: "I love this!" -> positive
+Example 2: "This is terrible." -> negative
+
+Input: "{text}" """
+    return llm.complete(prompt)
+
+# After - Examples extracted
+SENTIMENT_EXAMPLES = [
+    ("I love this!", "positive"),
+    ("This is terrible.", "negative"),
+]
+
+def build_few_shot_prompt(examples, input_text):
+    examples_text = "\n".join(
+        f'Example {i+1}: "{ex}" -> {label}'
+        for i, (ex, label) in enumerate(examples)
+    )
+    return f"Classify sentiment.\n\n{examples_text}\n\nInput: \"{input_text}\""
+
+def classify_sentiment(text):
+    return llm.complete(build_few_shot_prompt(SENTIMENT_EXAMPLES, text))
+```
+
+**Ruby:**
+```ruby
+# Before - Examples inline
+def classify_sentiment(text)
+  prompt = "Classify sentiment.\n\n" \
+           "Example 1: \"I love this!\" -> positive\n" \
+           "Example 2: \"This is terrible.\" -> negative\n\n" \
+           "Input: \"#{text}\""
+  llm.complete(prompt)
+end
+
+# After - Examples extracted
+SENTIMENT_EXAMPLES = [
+  ["I love this!", "positive"],
+  ["This is terrible.", "negative"],
+].freeze
+
+def build_few_shot_prompt(examples, input_text)
+  examples_text = examples.each_with_index.map do |(text, label), i|
+    "Example #{i + 1}: \"#{text}\" -> #{label}"
+  end.join("\n")
+  "Classify sentiment.\n\n#{examples_text}\n\nInput: \"#{input_text}\""
+end
+
+def classify_sentiment(text)
+  llm.complete(build_few_shot_prompt(SENTIMENT_EXAMPLES, text))
+end
+```
+
+---
+
+## SOLID Principle Refactorings
+
+### Single Responsibility Principle
+
+**Python:**
 ```python
 # Before - Multiple responsibilities
-def process_order(items, tax_rate, user):
-    subtotal = sum(item.price for item in items)
-    tax = subtotal * tax_rate
-    total = subtotal + tax
-    send_email(user.email, f"Order total: {total}")
-    update_inventory(items)
-    return total
+class User:
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
 
-# After - Single responsibilities
-def calculate_subtotal(items: list[Item]) -> float:
-    return sum(item.price for item in items)
+    def save(self):
+        db.users.insert(self)
 
-def calculate_tax(subtotal: float, tax_rate: float) -> float:
-    return subtotal * tax_rate
+    def send_email(self, subject, body):
+        mailer.send(self.email, subject, body)
 
-def calculate_total(items: list[Item], tax_rate: float) -> float:
-    subtotal = calculate_subtotal(items)
-    return subtotal + calculate_tax(subtotal, tax_rate)
+# After - Separated responsibilities
+class User:
+    def __init__(self, name, email):
+        self.name = name
+        self.email = email
+
+class UserRepository:
+    def save(self, user):
+        db.users.insert(user)
+
+class EmailService:
+    def send(self, user, subject, body):
+        mailer.send(user.email, subject, body)
 ```
 
-## Replace Magic Numbers with Constants
+**Ruby:**
+```ruby
+# Before - Multiple responsibilities
+class User
+  attr_accessor :name, :email
 
+  def save
+    DB[:users].insert(to_h)
+  end
+
+  def send_email(subject, body)
+    Mailer.deliver(email, subject, body)
+  end
+end
+
+# After - Separated responsibilities
+class User
+  attr_accessor :name, :email
+end
+
+class UserRepository
+  def save(user)
+    DB[:users].insert(user.to_h)
+  end
+end
+
+class EmailService
+  def send(user, subject, body)
+    Mailer.deliver(user.email, subject, body)
+  end
+end
+```
+
+---
+
+### Open/Closed Principle
+
+**Python:**
+```python
+# Before - Modifies existing code for new types
+class DiscountCalculator:
+    def calculate(self, customer_type, amount):
+        if customer_type == "regular":
+            return amount
+        elif customer_type == "premium":
+            return amount * 0.9
+        elif customer_type == "vip":
+            return amount * 0.8
+
+# After - Open for extension, closed for modification
+from abc import ABC, abstractmethod
+
+class DiscountStrategy(ABC):
+    @abstractmethod
+    def apply(self, amount): pass
+
+class RegularDiscount(DiscountStrategy):
+    def apply(self, amount): return amount
+
+class PremiumDiscount(DiscountStrategy):
+    def apply(self, amount): return amount * 0.9
+
+class VipDiscount(DiscountStrategy):
+    def apply(self, amount): return amount * 0.8
+
+class DiscountCalculator:
+    strategies = {
+        "regular": RegularDiscount(),
+        "premium": PremiumDiscount(),
+        "vip": VipDiscount(),
+    }
+
+    def calculate(self, customer_type, amount):
+        return self.strategies[customer_type].apply(amount)
+```
+
+**Ruby:**
+```ruby
+# Before - Modifies existing code for new types
+class DiscountCalculator
+  def calculate(customer_type, amount)
+    case customer_type
+    when "regular" then amount
+    when "premium" then amount * 0.9
+    when "vip" then amount * 0.8
+    end
+  end
+end
+
+# After - Open for extension, closed for modification
+class DiscountStrategy
+  def apply(amount)
+    raise NotImplementedError
+  end
+end
+
+class RegularDiscount < DiscountStrategy
+  def apply(amount)
+    amount
+  end
+end
+
+class PremiumDiscount < DiscountStrategy
+  def apply(amount)
+    amount * 0.9
+  end
+end
+
+class VipDiscount < DiscountStrategy
+  def apply(amount)
+    amount * 0.8
+  end
+end
+
+class DiscountCalculator
+  STRATEGIES = {
+    "regular" => RegularDiscount.new,
+    "premium" => PremiumDiscount.new,
+    "vip" => VipDiscount.new,
+  }.freeze
+
+  def calculate(customer_type, amount)
+    STRATEGIES[customer_type].apply(amount)
+  end
+end
+```
+
+---
+
+### Dependency Inversion Principle
+
+**Python:**
+```python
+# Before - High-level module depends on low-level
+class NotificationService:
+    def __init__(self):
+        self.email_sender = EmailSender()
+        self.sms_sender = SMSSender()
+
+    def notify(self, user, message):
+        self.email_sender.send(user.email, message)
+        self.sms_sender.send(user.phone, message)
+
+# After - Depends on abstractions
+class MessageSender(ABC):
+    @abstractmethod
+    def send(self, recipient, message): pass
+
+class EmailSender(MessageSender):
+    def send(self, recipient, message):
+        # Implementation
+
+class SMSSender(MessageSender):
+    def send(self, recipient, message):
+        # Implementation
+
+class NotificationService:
+    def __init__(self, senders: list[MessageSender]):
+        self.senders = senders
+
+    def notify(self, user, message):
+        for sender in self.senders:
+            sender.send(user.contact_for(sender), message)
+```
+
+**Ruby:**
+```ruby
+# Before - High-level module depends on low-level
+class NotificationService
+  def initialize
+    @email_sender = EmailSender.new
+    @sms_sender = SMSSender.new
+  end
+
+  def notify(user, message)
+    @email_sender.send(user.email, message)
+    @sms_sender.send(user.phone, message)
+  end
+end
+
+# After - Depends on abstractions
+class NotificationService
+  def initialize(senders)
+    @senders = senders
+  end
+
+  def notify(user, message)
+    @senders.each do |sender|
+      sender.send(user.contact_for(sender), message)
+    end
+  end
+end
+
+# Protocol (Ruby 3+) or Duck Typing
+class EmailSender
+  def send(recipient, message)
+    # Implementation
+  end
+end
+
+class SMSSender
+  def send(recipient, message)
+    # Implementation
+  end
+end
+```
+
+---
+
+## Functional Refactorings
+
+### Replace Loop with Pipeline
+
+**Python:**
 ```python
 # Before
-def calculate_total(items):
-    return sum(item.price for item in items) * 1.08
-
-# After
-DEFAULT_TAX_RATE = 0.08
-
-def calculate_total(items: list[Item]) -> float:
-    return sum(item.price for item in items) * (1 + DEFAULT_TAX_RATE)
-```
-
-## Prefer Functional Patterns
-
-```python
-# Before - Imperative
 result = []
 for item in items:
     if item.is_active:
-        result.append(item.price)
+        result.append(item.price * 1.1)
 
-# After - Functional
-def get_active_item_prices(items: list[Item]) -> Iterator[float]:
-    return (item.price for item in items if item.is_active)
+# After
+result = [item.price * 1.1 for item in items if item.is_active]
+
+# Or with functional style
+from operator import attrgetter
+result = list(map(
+    lambda p: p * 1.1,
+    filter(lambda i: i.is_active, items),
+    attrgetter('price')
+))
 ```
 
-## Separate Business Logic from I/O
+**Ruby:**
+```ruby
+# Before
+result = []
+items.each do |item|
+  if item.active?
+    result << item.price * 1.1
+  end
+end
 
+# After
+result = items.select(&:active?).map { |i| i.price * 1.1 }
+```
+
+---
+
+### Replace Mutation with Transformation
+
+**Python:**
 ```python
-# Before - Mixed concerns
-def process_user(user_id):
-    user = db.query(User).get(user_id)
-    formatted = f"Name: {user.name}, Email: {user.email}"
-    print(formatted)
+# Before - Mutating
+def apply_discounts(orders):
+    for order in orders:
+        if order.total > 100:
+            order.total *= 0.9
+    return orders
 
-# After - Separated
-def format_user_info(user: User) -> str:
-    return f"Name: {user.name}, Email: {user.email}"
+# After - Transforming
+@dataclass
+class Order:
+    total: float
 
-def display_user(user_id: int) -> None:
-    user = db.query(User).get(user_id)
-    print(format_user_info(user))
+def apply_discounts(orders):
+    return [
+        Order(order.total * 0.9) if order.total > 100 else order
+        for order in orders
+    ]
+```
+
+**Ruby:**
+```ruby
+# Before - Mutating
+def apply_discounts(orders)
+  orders.each do |order|
+    order.total *= 0.9 if order.total > 100
+  end
+  orders
+end
+
+# After - Transforming
+Order = Struct.new(:total)
+
+def apply_discounts(orders)
+  orders.map do |order|
+    if order.total > 100
+      Order.new(order.total * 0.9)
+    else
+      order
+    end
+  end
+end
 ```

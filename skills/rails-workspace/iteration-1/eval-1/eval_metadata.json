@@ -1,0 +1,57 @@
+{
+  "eval_id": 1,
+  "eval_name": "model-and-migration",
+  "prompt": "Create a Rails model called BlogPost with title (required, min 5 chars), body (text, required), and published_at (datetime, optional) fields. Generate the migration and include validations. Also add a scope for published posts.",
+  "assertions": [
+    {
+      "name": "model_file_exists",
+      "type": "file_exists",
+      "pattern": "**/blog_post.rb"
+    },
+    {
+      "name": "migration_file_exists",
+      "type": "file_exists",
+      "pattern": "**/*_create_blog_posts.rb"
+    },
+    {
+      "name": "validates_title_presence",
+      "type": "contains",
+      "pattern": "validates :title, presence: true"
+    },
+    {
+      "name": "validates_title_length",
+      "type": "contains",
+      "pattern": "minimum: 5"
+    },
+    {
+      "name": "validates_body_presence",
+      "type": "contains",
+      "pattern": "validates :body, presence: true"
+    },
+    {
+      "name": "has_published_scope",
+      "type": "contains",
+      "pattern": "scope :published"
+    },
+    {
+      "name": "inherits_from_application_record",
+      "type": "contains",
+      "pattern": "< ApplicationRecord"
+    },
+    {
+      "name": "migration_has_title_column",
+      "type": "contains",
+      "pattern": "t.string :title"
+    },
+    {
+      "name": "migration_has_body_column",
+      "type": "contains",
+      "pattern": "t.text :body"
+    },
+    {
+      "name": "migration_has_timestamps",
+      "type": "contains",
+      "pattern": "t.timestamps"
+    }
+  ]
+}

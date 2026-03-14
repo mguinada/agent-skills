@@ -5,6 +5,14 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ## Skills
 
+### AGENTS.md Creator
+
+**Use when:** Creating AGENTS.md/CLAUDE.md files, optimizing existing AI documentation, implementing progressive disclosure, detecting project structure (monorepo/polyrepo), or preventing documentation bloat. Triggers on "create agents.md", "update AGENTS.md", "AI documentation", "project context", "monorepo documentation", "progressive disclosure", or when AI repeatedly asks the same questions about the project.
+
+**Scope:** Create and maintain AI documentation files using progressive disclosure principles. Covers project structure detection (monorepo vs polyrepo indicators), three-level loading system architecture, content classification decision trees, reference index formats (problem-oriented, task-oriented, re-orientation), anti-patterns to avoid, and verification checklists. Emphasizes single source of truth over line count metrics.
+
+---
+
 ### GitHub Copilot SDK
 
 **Use when:** Embedding AI agents in apps, creating custom tools, implementing streaming responses, managing sessions, connecting to MCP servers, or creating custom agents. Triggers on Copilot SDK, GitHub SDK, agentic app, embed Copilot, programmable agent, MCP server, custom agent.
@@ -66,6 +74,30 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 **Use when:** Implementing a new feature or function, fixing a bug (write reproducing test first), adding tests to legacy code, reviewing code for test refactoring opportunities, or improving existing test quality and organization.
 
 **Scope:** Guides the complete TDD workflow using the Red-Green-Refactor cycle. Covers new features, bug fixes, and legacy code; identifies test improvement opportunities (parametrization, shared fixtures, markers); and applies pytest best practices and verification commands.
+
+---
+
+### Ruby on Rails
+
+**Use when:** Building Rails applications, working with controllers, models, migrations, routes, Active Job, Active Record, validations, associations, API-only apps, Active Storage file uploads, Action Cable WebSockets, Action Mailer email, Action Mailbox inbound email, Action Text rich text, I18n internationalization, or Rails configuration. Triggers on Rails generators, scaffold, migrate, ActiveRecord queries, controller actions, routing config, background jobs, file uploads, real-time features, email handling, translations, or any Rails-specific development task.
+
+**Scope:** Comprehensive Rails development guide with progressive disclosure. Covers controllers (filters, strong parameters, rendering), models (Active Record CRUD, validations, associations, callbacks, scopes), migrations (creating tables, indexes, foreign keys), routing (resource routing, namespaces, constraints), Active Job (background jobs, queues, retries), API-only applications (JSON rendering, versioning, authentication), Active Storage (file uploads, variants, direct uploads), Action Cable (WebSockets, channels, broadcasting), Action Mailer (email sending, attachments), Action Mailbox (inbound email routing), Action Text (rich text, Trix editor), I18n (translations, pluralization), and configuration (database, security, environments).
+
+---
+
+### TypeScript
+
+**Use when:** Working with TypeScript types, generics, type errors, tsconfig issues, module resolution, JS→TS migration, type performance, monorepo setup, or any TypeScript-related question. Triggers on .ts/.tsx files, tsconfig.json, types/ directory, @types/ packages, or TypeScript-related imports.
+
+**Scope:** TypeScript expert guidance for type-level programming, performance optimization, migrations, and real-world problem solving. Covers type patterns (branded types, conditional types, template literals), performance optimization (skipLibCheck, incremental, project references), type testing with Vitest, declaration files, monorepo configuration (Turborepo vs Nx), and tooling decisions (Biome vs ESLint). Includes progressive disclosure with detailed reference files.
+
+---
+
+### Vitest Testing
+
+**Use when:** Writing tests for JavaScript/TypeScript projects, unit testing, component testing (React/Vue/Svelte), browser/E2E testing, mocking, snapshots, code coverage, or handling flaky tests. Triggers on .test.* or .spec.* files, vitest.config.*, vite.config.* with test property, or mentions of testing/vitest.
+
+**Scope:** Comprehensive Vitest testing framework guide with progressive disclosure. Covers unit testing (describe/it/expect, async, hooks), component testing (React/Vue/Svelte), browser/E2E testing (locators, interactions, visual regression), complete mocking reference (functions, modules, globals, timers, file system, requests, dates, classes), all assertions and custom matchers, snapshots, coverage with validation checkpoints, debugging failed tests workflow, parallelism, reporters, type testing with expectTypeOf, in-source testing, test annotations, IDE integration, and CI/CD.
 
 ---
 
@@ -145,7 +177,7 @@ npx tessl skill review skills/*/
 ## Installation
 
 ```bash
-npx skills add mguinada/agent-skills
+npx skills add mguinada/ai-coding-toolkit
 ```
 
 ## Third party skills you may want to install
@@ -168,25 +200,25 @@ npx skills add https://github.com/vercel-labs/skills --skill find-skills
 npx skills add anthropics/claude-code
 ```
 
-**[Ruby on Rails](npx skills add NeverSight/learn-skills.dev)**
+**[Ruby on Rails](https://github.com/NeverSight/learn-skills.dev)**
 
 ```bash
 npx skills add NeverSight/learn-skills.dev --skill rails
 ```
 
-REST APIs
+### REST APIs
 
 **[RESTful HATEOAS](https://skills.sh/pproenca/dot-skills/restful-hateoas)**
 
-Note: rails oriented but can be used as a general REST API design skill with HATEOAS principles.
+> Note: Rails oriented but can be used as a general REST API design skill with HATEOAS principles.
 
 ```bash
 npx skills add https://github.com/pproenca/dot-skills --skill restful-hateoas
 ```
 
-[rest-api-design-patterns](https://skills.sh/manutej/luxor-claude-marketplace/rest-api-design-patterns)
+**[REST API Design Patterns](https://skills.sh/manutej/luxor-claude-marketplace/rest-api-design-patterns)**
 
-Note: examples in python (FastAPI) and JS (Express.js) but principles can be applied to any REST API design.
+> Note: Examples in Python (FastAPI) and JS (Express.js) but principles can be applied to any REST API design.
 
 ```bash
 npx skills add https://github.com/manutej/luxor-claude-marketplace --skill rest-api-design-patterns

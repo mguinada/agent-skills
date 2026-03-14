@@ -1,0 +1,66 @@
+{
+  "eval_id": 1,
+  "eval_name": "model-and-migration",
+  "run_id": "eval-1-without_skill",
+  "grading_timestamp": "2026-03-14T20:10:00Z",
+  "expectations": [
+    {
+      "text": "Model file exists with correct name",
+      "passed": true,
+      "evidence": "File blog_post.rb exists at outputs/blog_post.rb"
+    },
+    {
+      "text": "Migration file exists",
+      "passed": true,
+      "evidence": "File 20260314120000_create_blog_posts.rb exists"
+    },
+    {
+      "text": "Validates title presence",
+      "passed": true,
+      "evidence": "Code contains: validates :title, presence: true"
+    },
+    {
+      "text": "Validates title minimum length of 5",
+      "passed": true,
+      "evidence": "Code contains: length: { minimum: 5 }"
+    },
+    {
+      "text": "Validates body presence",
+      "passed": true,
+      "evidence": "Code contains: validates :body, presence: true"
+    },
+    {
+      "text": "Has published scope",
+      "passed": true,
+      "evidence": "Code contains: scope :published, -> { where.not(published_at: nil) }"
+    },
+    {
+      "text": "Inherits from ApplicationRecord",
+      "passed": true,
+      "evidence": "Code contains: class BlogPost < ApplicationRecord"
+    },
+    {
+      "text": "Migration has title column",
+      "passed": true,
+      "evidence": "Migration contains: t.string :title"
+    },
+    {
+      "text": "Migration has body column",
+      "passed": true,
+      "evidence": "Migration contains: t.text :body"
+    },
+    {
+      "text": "Migration has published_at column",
+      "passed": true,
+      "evidence": "Migration contains: t.datetime :published_at"
+    },
+    {
+      "text": "Migration has timestamps",
+      "passed": true,
+      "evidence": "Migration contains: t.timestamps"
+    }
+  ],
+  "passed_count": 11,
+  "total_count": 11,
+  "pass_rate": 100.0
+}

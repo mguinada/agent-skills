@@ -31,7 +31,7 @@ This is a collection of AI agent skills following the [Agent Skills](https://age
 Users install skills via:
 
 ```bash
-npx skills add mguinada/agent-skills
+npx skills add mguinada/ai-coding-toolkit
 ```
 
 Individual skills can be installed from the monorepo.
