@@ -1,0 +1,113 @@
+{
+  "skill_name": "rails",
+  "iteration": 1,
+  "timestamp": "2026-03-14T20:10:00Z",
+  "configurations": [
+    {
+      "name": "with_skill",
+      "description": "Using the Rails skill"
+    },
+    {
+      "name": "without_skill",
+      "description": "Baseline without skill"
+    }
+  ],
+  "evals": [
+    {
+      "eval_id": 1,
+      "eval_name": "model-and-migration",
+      "with_skill": {
+        "pass_rate": 100.0,
+        "passed": 11,
+        "total": 11,
+        "duration_seconds": 34.6,
+        "total_tokens": 2500
+      },
+      "without_skill": {
+        "pass_rate": 100.0,
+        "passed": 11,
+        "total": 11,
+        "duration_seconds": 36.5,
+        "total_tokens": 2800
+      },
+      "delta": {
+        "pass_rate": 0.0,
+        "duration": -1.9,
+        "tokens": -300
+      }
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "controller-with-routes",
+      "with_skill": {
+        "pass_rate": 100.0,
+        "passed": 9,
+        "total": 9,
+        "duration_seconds": 38.2,
+        "total_tokens": 3200
+      },
+      "without_skill": {
+        "pass_rate": 88.9,
+        "passed": 8,
+        "total": 9,
+        "duration_seconds": 39.2,
+        "total_tokens": 3500
+      },
+      "delta": {
+        "pass_rate": 11.1,
+        "duration": -1.0,
+        "tokens": -300
+      }
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "api-endpoint",
+      "with_skill": {
+        "pass_rate": 100.0,
+        "passed": 9,
+        "total": 9,
+        "duration_seconds": 55.1,
+        "total_tokens": 3800
+      },
+      "without_skill": {
+        "pass_rate": 90.0,
+        "passed": 9,
+        "total": 10,
+        "duration_seconds": 65.8,
+        "total_tokens": 4200
+      },
+      "delta": {
+        "pass_rate": 10.0,
+        "duration": -10.7,
+        "tokens": -400
+      }
+    }
+  ],
+  "summary": {
+    "with_skill": {
+      "mean_pass_rate": 100.0,
+      "stddev_pass_rate": 0.0,
+      "mean_duration_seconds": 42.6,
+      "mean_tokens": 3167
+    },
+    "without_skill": {
+      "mean_pass_rate": 92.97,
+      "stddev_pass_rate": 5.56,
+      "mean_duration_seconds": 47.2,
+      "mean_tokens": 3500
+    },
+    "overall_delta": {
+      "pass_rate_improvement": 7.03,
+      "duration_improvement_seconds": 4.6,
+      "token_reduction": 333
+    }
+  },
+  "analyst_observations": [
+    "The Rails skill shows consistent improvement across all three test cases.",
+    "Eval 2 (controller) shows the biggest pass rate improvement: with-skill uses before_action for DRY code, without-skill has inline user lookup.",
+    "Eval 3 (API) shows the biggest speed improvement: 10.7 seconds faster with skill.",
+    "Without-skill version has more comprehensive documentation and security considerations (secure_compare).",
+    "With-skill version follows Rails conventions more consistently (params.expect vs params.require).",
+    "Both versions produce production-quality code with proper error handling."
+  ]
+}

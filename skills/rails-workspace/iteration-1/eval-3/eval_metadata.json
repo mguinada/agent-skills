@@ -1,0 +1,47 @@
+{
+  "eval_id": 3,
+  "eval_name": "api-endpoint",
+  "prompt": "Create a Rails API endpoint for listing products. It should return JSON, support pagination (page and per_page params), and include basic token authentication via X-API-Key header. Use API-only controller pattern.",
+  "assertions": [
+    {
+      "name": "controller_file_exists",
+      "type": "file_exists",
+      "pattern": "**/products_controller.rb"
+    },
+    {
+      "name": "inherits_from_api_controller",
+      "type": "contains",
+      "pattern": "ActionController::API\\|< Api::BaseController"
+    },
+    {
+      "name": "renders_json",
+      "type": "contains",
+      "pattern": "render json:"
+    },
+    {
+      "name": "has_pagination",
+      "type": "contains",
+      "pattern": "page\\|per_page\\|limit\\|offset"
+    },
+    {
+      "name": "has_authentication",
+      "type": "contains",
+      "pattern": "X-API-Key\\|api_key\\|authenticate"
+    },
+    {
+      "name": "uses_before_action",
+      "type": "contains",
+      "pattern": "before_action"
+    },
+    {
+      "name": "has_index_action",
+      "type": "contains",
+      "pattern": "def index"
+    },
+    {
+      "name": "api_namespace",
+      "type": "contains",
+      "pattern": "namespace :api\\|Api::"
+    }
+  ]
+}

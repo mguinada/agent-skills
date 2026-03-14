@@ -1,8 +1,8 @@
 ---
 name: rails
-description: Ruby on Rails framework development. Use when: building Rails applications, working with controllers, models, migrations, routes, Active Job, Active Record, validations, associations, API-only apps, Active Storage file uploads, Action Cable WebSockets, Action Mailer email, Action Mailbox inbound email, Action Text rich text, I18n internationalization, or Rails configuration. Triggers on: Rails generators, scaffold, migrate, ActiveRecord queries, controller actions, routing config, background jobs, file uploads, real-time features, email handling, translations, or any Rails-specific development task.
+description: "Ruby on Rails framework development covering MVC architecture, Active Record, migrations, routing, background jobs, and full-stack web applications. **PROACTIVE ACTIVATION**: Auto-invoke when editing Ruby files in a Rails project, running rails commands, or working with Rails-specific patterns. **DETECTION**: Check for Gemfile with 'rails' gem, config/application.rb, app/ directory (controllers, models, views), db/migrate/, config/routes.rb, bin/rails, or *.rb files with ActionController/ActiveRecord imports. **USE CASES**: Creating controllers/models/migrations, building REST APIs, background jobs with Active Job, real-time features with Action Cable, file uploads with Active Storage, email with Action Mailer, internationalization, authentication, and Rails configuration."
 author: mguinada
-version: 1.1.0
+version: 1.2.0
 tags: [rails, ruby, web, mvc, activerecord, api, actioncable, activestorage, actionmailer]
 ---
 

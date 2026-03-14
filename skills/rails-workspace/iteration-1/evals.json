@@ -1,0 +1,26 @@
+{
+  "skill_name": "rails",
+  "evals": [
+    {
+      "id": 1,
+      "name": "model-and-migration",
+      "prompt": "Create a Rails model called BlogPost with title (required, min 5 chars), body (text, required), and published_at (datetime, optional) fields. Generate the migration and include validations. Also add a scope for published posts.",
+      "expected_output": "A BlogPost model with proper validations and a migration file, plus a published scope",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "controller-with-routes",
+      "prompt": "Create a Rails controller for user registrations. It should have new, create, and update actions. Use strong parameters, handle validation errors, and set up the routes. The controller should inherit from ApplicationController.",
+      "expected_output": "A RegistrationsController with proper strong params, error handling, and routes configuration",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "api-endpoint",
+      "prompt": "Create a Rails API endpoint for listing products. It should return JSON, support pagination (page and per_page params), and include basic token authentication via X-API-Key header. Use API-only controller pattern.",
+      "expected_output": "An API controller with pagination, JSON rendering, and token authentication",
+      "files": []
+    }
+  ]
+}

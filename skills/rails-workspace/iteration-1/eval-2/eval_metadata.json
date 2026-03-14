@@ -1,0 +1,47 @@
+{
+  "eval_id": 2,
+  "eval_name": "controller-with-routes",
+  "prompt": "Create a Rails controller for user registrations. It should have new, create, and update actions. Use strong parameters, handle validation errors, and set up the routes. The controller should inherit from ApplicationController.",
+  "assertions": [
+    {
+      "name": "controller_file_exists",
+      "type": "file_exists",
+      "pattern": "**/registrations_controller.rb"
+    },
+    {
+      "name": "has_new_action",
+      "type": "contains",
+      "pattern": "def new"
+    },
+    {
+      "name": "has_create_action",
+      "type": "file_exists",
+      "pattern": "def create"
+    },
+    {
+      "name": "has_update_action",
+      "type": "contains",
+      "pattern": "def update"
+    },
+    {
+      "name": "uses_strong_params",
+      "type": "contains",
+      "pattern": "params.expect\\|params.require"
+    },
+    {
+      "name": "inherits_from_application_controller",
+      "type": "contains",
+      "pattern": "< ApplicationController"
+    },
+    {
+      "name": "handles_errors",
+      "type": "contains",
+      "pattern": "if.*save\\|render.*error\\|unprocessable_entity"
+    },
+    {
+      "name": "routes_configured",
+      "type": "file_exists",
+      "pattern": "**/routes.rb"
+    }
+  ]
+}

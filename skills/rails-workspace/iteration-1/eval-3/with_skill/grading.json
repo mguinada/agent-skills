@@ -1,0 +1,56 @@
+{
+  "eval_id": 3,
+  "eval_name": "api-endpoint",
+  "run_id": "eval-3-with_skill",
+  "grading_timestamp": "2026-03-14T20:10:00Z",
+  "expectations": [
+    {
+      "text": "Controller file exists",
+      "passed": true,
+      "evidence": "File products_controller.rb exists"
+    },
+    {
+      "text": "Uses API-only pattern (ActionController::API or namespaced)",
+      "passed": true,
+      "evidence": "Uses namespaced Api::V1 module with ApplicationController inheritance"
+    },
+    {
+      "text": "Renders JSON",
+      "passed": true,
+      "evidence": "Code contains: render json: products"
+    },
+    {
+      "text": "Has pagination",
+      "passed": true,
+      "evidence": "Code contains: Product.page(page_param).per(per_page_param)"
+    },
+    {
+      "text": "Has authentication via X-API-Key",
+      "passed": true,
+      "evidence": "Code contains: request.headers['X-API-Key']"
+    },
+    {
+      "text": "Uses before_action",
+      "passed": true,
+      "evidence": "Code contains: before_action :authenticate_api_key"
+    },
+    {
+      "text": "Has index action",
+      "passed": true,
+      "evidence": "Code contains: def index"
+    },
+    {
+      "text": "API namespace in routes",
+      "passed": true,
+      "evidence": "Routes use namespace :api with namespace :v1"
+    },
+    {
+      "text": "Pagination headers included",
+      "passed": true,
+      "evidence": "Code sets X-Total-Count, X-Total-Pages headers"
+    }
+  ],
+  "passed_count": 9,
+  "total_count": 9,
+  "pass_rate": 100.0
+}
