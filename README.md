@@ -85,6 +85,14 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ---
 
+### Vitest Testing
+
+**Use when:** Writing tests for JavaScript/TypeScript projects, unit testing, component testing (React/Vue/Svelte), browser/E2E testing, mocking, snapshots, code coverage, or handling flaky tests. Triggers on .test.* or .spec.* files, vitest.config.*, vite.config.* with test property, or mentions of testing/vitest.
+
+**Scope:** Comprehensive Vitest testing framework guide with progressive disclosure. Covers unit testing (describe/it/expect, async, hooks), component testing (React/Vue/Svelte), browser/E2E testing (locators, interactions, visual regression), complete mocking reference (functions, modules, globals, timers, file system, requests, dates, classes), all assertions and custom matchers, snapshots, coverage, parallelism, reporters, type testing with expectTypeOf, in-source testing, test annotations, IDE integration, debugging, and CI/CD.
+
+---
+
 ## Skill Evaluation
 
 This project includes multiple ways to evaluate Agent Skills quality and format compliance.

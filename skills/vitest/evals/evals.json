@@ -1,0 +1,23 @@
+{
+  "skill_name": "vitest",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need to write a test for a React component that has a form with email and password fields. When the user fills in the fields and clicks submit, it should call the onSubmit callback with the values. I'm using Vitest. Can you show me how to write this test?",
+      "expected_output": "A complete Vitest browser mode test for a React form component using vitest-browser-react, with locators for form fields, fill interactions, and assertion that onSubmit was called with the correct values.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "I have a flaky test that sometimes passes and sometimes fails. It's testing an API call that loads some data. How can I fix this in Vitest? The test is using setTimeout which I suspect is the problem.",
+      "expected_output": "Explanation of why setTimeout causes flakiness, demonstration of proper async waiting using vi.waitFor or expect.poll, and guidance on using vi.useFakeTimers if appropriate. Should also mention the flaky test detection and handling patterns.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "I need to mock an imported module called 'api' that exports fetchUser and fetchPosts functions. I want fetchUser to return a specific user object and fetchPosts to return an empty array. How do I do this in Vitest?",
+      "expected_output": "Complete vi.mock example showing how to mock the module with vi.fn().mockResolvedValue for both exports, including proper import order (vi.mock before the actual import) and how to use the mocked functions in assertions.",
+      "files": []
+    }
+  ]
+}
