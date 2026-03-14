@@ -71,9 +71,9 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ### Ruby on Rails
 
-**Use when:** Building Rails applications, working with controllers, models, migrations, routes, Active Job, Active Record, validations, associations, or API-only apps. Triggers on Rails generators, scaffold, migrate, ActiveRecord queries, controller actions, routing config, background jobs, or any Rails-specific development task.
+**Use when:** Building Rails applications, working with controllers, models, migrations, routes, Active Job, Active Record, validations, associations, API-only apps, Active Storage file uploads, Action Cable WebSockets, Action Mailer email, Action Mailbox inbound email, Action Text rich text, I18n internationalization, or Rails configuration. Triggers on Rails generators, scaffold, migrate, ActiveRecord queries, controller actions, routing config, background jobs, file uploads, real-time features, email handling, translations, or any Rails-specific development task.
 
-**Scope:** Comprehensive Rails development guide with progressive disclosure. Covers controllers (filters, strong parameters, rendering), models (Active Record CRUD, validations, associations, callbacks, scopes), migrations (creating tables, indexes, foreign keys), routing (resource routing, namespaces, constraints), Active Job (background jobs, queues, retries), and API-only applications (JSON rendering, versioning, authentication, serialization).
+**Scope:** Comprehensive Rails development guide with progressive disclosure. Covers controllers (filters, strong parameters, rendering), models (Active Record CRUD, validations, associations, callbacks, scopes), migrations (creating tables, indexes, foreign keys), routing (resource routing, namespaces, constraints), Active Job (background jobs, queues, retries), API-only applications (JSON rendering, versioning, authentication), Active Storage (file uploads, variants, direct uploads), Action Cable (WebSockets, channels, broadcasting), Action Mailer (email sending, attachments), Action Mailbox (inbound email routing), Action Text (rich text, Trix editor), I18n (translations, pluralization), and configuration (database, security, environments).
 
 ---
 

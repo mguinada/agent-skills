@@ -1,9 +1,9 @@
 ---
 name: rails
-description: Ruby on Rails framework development. Use when: building Rails applications, working with controllers, models, migrations, routes, Active Job, Active Record, validations, associations, or API-only apps. Triggers on: Rails generators, scaffold, migrate, ActiveRecord queries, controller actions, routing config, background jobs, or any Rails-specific development task.
+description: Ruby on Rails framework development. Use when: building Rails applications, working with controllers, models, migrations, routes, Active Job, Active Record, validations, associations, API-only apps, Active Storage file uploads, Action Cable WebSockets, Action Mailer email, Action Mailbox inbound email, Action Text rich text, I18n internationalization, or Rails configuration. Triggers on: Rails generators, scaffold, migrate, ActiveRecord queries, controller actions, routing config, background jobs, file uploads, real-time features, email handling, translations, or any Rails-specific development task.
 author: mguinada
-version: 1.0.0
-tags: [rails, ruby, web, mvc, activerecord, api]
+version: 1.1.0
+tags: [rails, ruby, web, mvc, activerecord, api, actioncable, activestorage, actionmailer]
 ---
 
 # Ruby on Rails Development
@@ -460,12 +460,23 @@ For detailed API patterns (authentication, versioning, serialization), see `refe
 
 For deep dives into specific topics, read these files:
 
+### Core Components
 - `references/controllers.md` — Filters, streaming, strong parameters, authentication
 - `references/models.md` — Associations, callbacks, validations, querying
 - `references/migrations.md` — Indexes, foreign keys, data migrations, rollback
 - `references/routes.md` — Namespaces, concerns, constraints, mounting
 - `references/active_job.md` — Queues, retries, callbacks, Solid Queue
 - `references/api.md` — Versioning, serialization, JWT, CORS
+
+### Additional Components
+- `references/active_model.md` — Active Model API, validations, callbacks, dirty tracking
+- `references/action_mailer.md` — Creating mailers, views, sending email, attachments
+- `references/action_mailbox.md` — Routing incoming email, ingress configuration
+- `references/action_text.md` — Rich text content, Trix editor, attachments
+- `references/active_storage.md` — File uploads, variants, direct uploads, cloud storage
+- `references/action_cable.md` — WebSockets, channels, broadcasting, real-time features
+- `references/i18n.md` — Internationalization, translations, pluralization, locale management
+- `references/configuring.md` — Application, database, security, environment-specific config
 
 ---
 
