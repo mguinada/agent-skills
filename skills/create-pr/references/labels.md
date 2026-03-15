@@ -1,4 +1,4 @@
-# GitHub Labels for Sprolio PRs
+# GitHub Labels for PRs
 
 This document defines the standard labels applied to pull requests and provides the implementation script for creating and assigning them.
 
@@ -41,7 +41,7 @@ This document defines the standard labels applied to pull requests and provides 
 
 ```bash
 #!/bin/bash
-# Label assignment script for Sprolio PRs
+# Label assignment script for PRs
 # Run this after creating a PR to assign appropriate labels
 
 set -e

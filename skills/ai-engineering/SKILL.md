@@ -94,7 +94,7 @@ def agent_loop(mission: str, max_iterations: int = 10):
     for i in range(max_iterations):
         # THINK: LLM analyzes current state and plans next action
         response = client.messages.create(
-            model="claude-sonnet-4-5-20250929",
+            model="claude-sonnet-4-6",
             messages=[{"role": "user", "content": context}],
             tools=[search_tool, read_page_tool, finish_tool]
         )
@@ -177,7 +177,7 @@ def analyze_document(text: str) -> str:
 
     # STEP 1: Extract key entities
     step1 = client.messages.create(
-        model="claude-sonnet-4-5-20250929",
+        model="claude-sonnet-4-6",
         messages=[{
             "role": "user",
             "content": f"Extract all entities (people, orgs, dates) from:\n{text}"
@@ -187,7 +187,7 @@ def analyze_document(text: str) -> str:
 
     # STEP 2: Summarize using extracted entities
     step2 = client.messages.create(
-        model="claude-sonnet-4-5-20250929",
+        model="claude-sonnet-4-6",
         messages=[{
             "role": "user",
             "content": f"Summarize this document using these entities: {entities}\n\nDocument: {text}"
@@ -197,7 +197,7 @@ def analyze_document(text: str) -> str:
 
     # STEP 3: Generate recommendations based on summary
     step3 = client.messages.create(
-        model="claude-sonnet-4-5-20250929",
+        model="claude-sonnet-4-6",
         messages=[{
             "role": "user",
             "content": f"Based on this summary, provide 3 actionable recommendations:\n{summary}"
@@ -293,7 +293,7 @@ For practical implementation guidance including model selection, task decomposit
 ```python
 # Single call with retrieval
 response = claude.messages.create(
-    model="claude-sonnet-4-5-20250929",
+    model="claude-sonnet-4-6",
     messages=[{"role": "user", "content": query}],
     tools=[search_tool, database_tool]
 )

@@ -7,7 +7,7 @@ Practical guidance for implementing agentic systems. See SKILL.md for pattern se
 ```python
 # Single call with retrieval
 response = claude.messages.create(
-    model="claude-sonnet-4-5-20250929",
+    model="claude-sonnet-4-6",
     messages=[{"role": "user", "content": query}],
     tools=[search_tool, database_tool]
 )

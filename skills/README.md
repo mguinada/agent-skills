@@ -61,6 +61,14 @@ Skills follow the [Agent Skills](https://agentskills.io/) format.
 
 ---
 
+### Design Pattern Adopter
+
+**Use when:** Refactoring code for better structure, solving recurring design problems, discussing object-oriented architecture, implementing creational/structural/behavioral patterns, decoupling components, managing object creation, or organizing complex class hierarchies. Triggers on mentions of design patterns, tight coupling, deep inheritance hierarchies, factories, builders, singletons, adapters, or observers.
+
+**Scope:** Guide to all 23 GoF design patterns with intent, applicability, and pattern selection decision trees. Covers Creational (Factory Method, Abstract Factory, Builder, Prototype, Singleton), Structural (Adapter, Bridge, Composite, Decorator, Facade, Flyweight, Proxy), and Behavioral (Chain of Responsibility, Command, Iterator, Mediator, Memento, Observer, State, Strategy, Template Method, Visitor) patterns. Includes code-smell-to-pattern mapping, anti-patterns to avoid, and quick decision flowchart.
+
+---
+
 ### AI Engineering
 
 **Use when:** Designing, building, or debugging agentic systems. Triggers on choosing agentic patterns (workflows vs agents), implementing prompt chaining/routing/parallelization/orchestrator-workers/evaluator-optimizer workflows, building autonomous agents with tools, designing Agent-Computer Interfaces (ACI) and tool specifications, or troubleshooting/optimizing existing agent implementations.

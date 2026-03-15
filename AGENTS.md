@@ -72,8 +72,19 @@ tags: [tag1, tag2, tag3]
 - **refactor** - Code simplification using TDD methodology
 - **git-commit** - Generate conventional git commit messages
 - **create-pr** - Create GitHub pull requests with proper formatting
-- **copilot-sdk** - Build agentic applications with GitHub Copilot SDK
+- **copilot-sdk** - Build agentic applications with GitHub Copilot SDK (Technical Preview)
 - **prompt-engineering** - Generate effective prompts for agentic systems
+- **debug** - Systematic root-cause-first debugging methodology
+- **docker** - Docker containerization, multi-stage builds, and Compose
+- **changelog** - Generate and maintain CHANGELOG.md files
+- **release** - Orchestrate full release sequence (tag, publish, GitHub release)
+- **agents-md-creator** - Create and maintain AGENTS.md / CLAUDE.md files
+- **design-pattern-adopter** - Guide to all 23 GoF design patterns
+- **ai-engineering** - Build AI agents and agentic workflows
+- **phoenix-observability** - LLM tracing, evaluation, and monitoring with Arize Phoenix
+- **rails** - Comprehensive Ruby on Rails development guide
+- **typescript** - TypeScript type-level programming and tooling
+- **vitest** - Vitest testing framework for JavaScript/TypeScript
 
 ## Skill Development Guidelines
 
@@ -218,6 +229,37 @@ Slash commands in `commands/` provide explicit, on-demand entry points into key 
 **Trigger:** User types `/deploy-check [target or environment]` or wants to validate deployment readiness.
 
 **Action:** Runs a multi-layer pre-flight check. Invokes skill `tdd` and launches the `e2e-runner` agent for QA validation. Launches the `security-reviewer` agent for vulnerability and secrets scanning. Invokes skill `docker` for container and infra readiness; launches the `database-reviewer` agent if migrations are present. Synthesises all findings into an explicit **Go / No-Go** verdict with a deployment plan and rollback procedures.
+
+---
+
+### `/plan`
+
+**Trigger:** User types `/plan [feature or task description]` or wants a structured plan before writing code.
+
+**Action:** Launches the `planner` agent. Asks clarifying questions if the task is underspecified. Presents the plan (Overview, Architecture Decision, Iterations, Unresolved Questions) and yields control for user review. Does not proceed to implementation until the user approves.
+
+---
+
+### `/docs`
+
+**Trigger:** User types `/docs [file, module, or scope]` or wants documentation generated or updated.
+
+**Action:** Launches the `technical-docs-writer` agent. Reads relevant source files and produces structured documentation (README, API reference, architecture guide, or tutorial) as appropriate. Defaults to recently changed files if no scope is specified.
+
+---
+
+## Agents
+
+The plugin includes the following subagents:
+
+- **`code-reviewer`** - Code quality, SOLID principles, design patterns, and readability
+- **`security-reviewer`** - Security vulnerabilities, injection risks, secrets exposure, and unsafe patterns
+- **`database-reviewer`** - PostgreSQL query optimization, schema design, RLS, and migration safety
+- **`python-reviewer`** - Python-specific patterns, type hints, idiomatic usage, and Python security
+- **`tdd-guide`** - TDD specialist enforcing write-tests-first methodology with multi-language support
+- **`e2e-runner`** - End-to-end testing with Agent Browser (preferred) and Playwright fallback
+- **`planner`** - Structured planning with iterative breakdown before implementation
+- **`technical-docs-writer`** - Generates and maintains technical documentation
 
 ---
 
