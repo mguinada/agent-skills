@@ -58,27 +58,27 @@ Slash commands provide **explicit, on-demand** entry points into workflows. Type
 
 | Command | What it does |
 |---------|--------------|
-| `/ask [question]` | Adversarial architectural consultation — four advisors (Systems Designer, Strategist, Scalability, Risk) analyse your question |
-| `/commit [hint]` | Inspect staged changes, draft a conventional commit message, and execute the commit |
-| `/pr` | Push the current branch and create a GitHub pull request with a conventional title, body, and labels |
-| `/changelog [version]` | Generate a grouped CHANGELOG.md entry from git history since the last tag |
-| `/release [version]` | Full release sequence: pre-flight checks → changelog → version bump → tag → GitHub release |
-| `/tdd [feature]` | Drive the Red-Green-Refactor cycle with the `tdd-guide` agent enforcing write-tests-first |
-| `/refactor [file]` | Apply safe, test-backed refactoring steps; uses `tdd` if new tests are needed |
-| `/debug [error]` | Four-phase debugging: Reproduce → Locate → Fix → Verify; adds regression tests after the fix |
-| `/review [scope]` | Parallel code review by `code-reviewer`, `security-reviewer`, `python-reviewer` (if `.py` files), `database-reviewer` (if DB changes) |
-| `/agents-md` | Generate or update `AGENTS.md` / `CLAUDE.md` with progressive disclosure structure |
-| `/docker [service]` | Scaffold a `Dockerfile` + `.dockerignore`, or audit and fix existing Docker configuration |
-| `/deploy-check [env]` | Multi-layer deployment readiness check — tests, security scan, container audit, DB migration check → Go / No-Go verdict |
-| `/plan [feature]` | Structured planning before implementation: clarify scope, iterate, yield control for review |
-| `/docs [scope]` | Generate or update documentation (README, API reference, architecture guide, or tutorial) |
+| `/act:ask [question]` | Adversarial architectural consultation — four advisors (Systems Designer, Strategist, Scalability, Risk) analyse your question |
+| `/act:commit [hint]` | Inspect staged changes, draft a conventional commit message, and execute the commit |
+| `/act:pr` | Push the current branch and create a GitHub pull request with a conventional title, body, and labels |
+| `/act:changelog [version]` | Generate a grouped CHANGELOG.md entry from git history since the last tag |
+| `/act:release [version]` | Full release sequence: pre-flight checks → changelog → version bump → tag → GitHub release |
+| `/act:tdd [feature]` | Drive the Red-Green-Refactor cycle with the `tdd-guide` agent enforcing write-tests-first |
+| `/act:refactor [file]` | Apply safe, test-backed refactoring steps; uses `tdd` if new tests are needed |
+| `/act:debug [error]` | Four-phase debugging: Reproduce → Locate → Fix → Verify; adds regression tests after the fix |
+| `/act:review [scope]` | Parallel code review by `code-reviewer`, `security-reviewer`, `python-reviewer` (if `.py` files), `database-reviewer` (if DB changes) |
+| `/act:agents-md` | Generate or update `AGENTS.md` / `CLAUDE.md` with progressive disclosure structure |
+| `/act:docker [service]` | Scaffold a `Dockerfile` + `.dockerignore`, or audit and fix existing Docker configuration |
+| `/act:deploy-check [env]` | Multi-layer deployment readiness check — tests, security scan, container audit, DB migration check → Go / No-Go verdict |
+| `/act:plan [feature]` | Structured planning before implementation: clarify scope, iterate, yield control for review |
+| `/act:docs [scope]` | Generate or update documentation (README, API reference, architecture guide, or tutorial) |
 
 **Usage example:**
 
 ```
-/review src/auth/
-/commit
-/pr
+/act:review src/auth/
+/act:commit
+/act:pr
 ```
 
 ---
@@ -106,6 +106,45 @@ Use the code-reviewer agent to review src/payments/
 
 ```
 Ask the planner agent to break down adding OAuth2 support
+```
+
+---
+
+---
+
+## For Plugin Authors
+
+### Marketplace Registration (Optional)
+
+Marketplace registration is **optional** — users can install directly from GitHub using the command shown above. Register a marketplace only if you want to distribute multiple plugins or provide curated collections.
+
+### Create a Marketplace on GitHub
+
+1. Create `.claude-plugin/marketplace.json` in your repository root:
+
+```json
+{
+  "name": "act",
+  "owner": {
+    "name": "mguinada"
+  },
+  "plugins": [
+    {
+      "name": "act",
+      "source": "./",
+      "description": "AI coding skills and agents for Claude Code",
+      "version": "1.0.0"
+    }
+  ]
+}
+```
+
+2. Push to GitHub
+
+3. Users can then add your marketplace:
+
+```bash
+/plugin marketplace add mguinada/ai-coding-toolkit
 ```
 
 ---
