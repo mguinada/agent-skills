@@ -12,7 +12,8 @@
       "Bash(find skills/*/references -type f | head -10)",
       "mcp__firecrawl__firecrawl_map",
       "mcp__firecrawl__firecrawl_scrape",
-      "Bash(cp:*)"
+      "Bash(cp:*)",
+      "mcp__firecrawl__firecrawl_search"
     ]
   }
 }
