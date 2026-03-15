@@ -101,7 +101,7 @@ Common causes: race conditions (use auto-wait locators), network timing (wait fo
 
 ## Reference
 
-For detailed Playwright patterns, Page Object Model examples, configuration templates, CI/CD workflows, and artifact management strategies, use skill: `vitest`.
+For Playwright configuration, CI/CD patterns, and test architecture, consult the [Playwright documentation](https://playwright.dev/docs/intro) and the project's existing `playwright.config.*` file.
 
 ---
 

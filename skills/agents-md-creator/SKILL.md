@@ -1,5 +1,8 @@
 ---
 name: agents-md-creator
+author: mguinada
+version: 1.0.0
+tags: [agents-md, claude-md, ai-docs, progressive-disclosure, documentation]
 description: |
   Create, optimize, and maintain AGENTS.md and CLAUDE.md files using progressive disclosure.
 

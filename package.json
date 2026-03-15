@@ -1,7 +1,7 @@
 {
   "name": "ai-coding-toolkit",
   "version": "1.0.0",
-  "description": "Collection of AI agent skills following the Agent Skills format",
+  "description": "Claude Code plugin with AI coding skills and agents",
   "scripts": {
     "eval": "node scripts/evaluate-skills.mjs",
     "eval:all": "node scripts/evaluate-skills.mjs all",
@@ -17,7 +17,8 @@
     "ai-coding-toolkit",
     "ai",
     "skills",
-    "claude"
+    "claude",
+    "claude-code-plugin"
   ],
   "author": "mguinada",
   "license": "MIT"

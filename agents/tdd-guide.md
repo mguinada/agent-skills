@@ -14,6 +14,7 @@ Use skills:
 
 - **Test Driven Development**: skill: `tdd` for guiding through Red-Green-Refactor cycle, writing tests first, and ensuring coverage.
 - **Frontend Testing**: skill: `vitest` for writing unit, integration, and E2E tests in JavaScript/TypeScript projects.
+- **Ruby on Rails**: skill: `rails` for Rails-specific test patterns (request specs, model specs, system tests with Capybara).
 
 ## Your Role
 
@@ -29,8 +30,19 @@ Use skills:
 Write a failing test that describes the expected behavior.
 
 ### 2. Run Test -- Verify it FAILS
+
+Detect runtime and use the appropriate command:
 ```bash
+# JavaScript/TypeScript
 npm test
+# or
+npx vitest run
+
+# Python
+uv run pytest
+
+# Ruby
+bundle exec rspec
 ```
 
 ### 3. Write Minimal Implementation (GREEN)
@@ -42,18 +54,29 @@ Only enough code to make the test pass.
 Remove duplication, improve names, optimize -- tests must stay green.
 
 ### 6. Verify Coverage
+
+Detect runtime and use the appropriate command:
 ```bash
+# JavaScript/TypeScript
 npm run test:coverage
-# Required: 80%+ branches, functions, lines, statements
+# or
+npx vitest run --coverage
+
+# Python
+uv run pytest --cov=src --cov-report=term-missing
+
+# Ruby
+COVERAGE=true bundle exec rspec
 ```
+# Required: 80%+ branches, functions, lines, statements
 
 ## Test Types Required
 
-| Type | What to Test | When |
-|------|-------------|------|
-| **Unit** | Individual functions in isolation | Always |
-| **Integration** | API endpoints, database operations | Always |
-| **E2E** | Critical user flows (Playwright) | Critical paths |
+| Type | What to Test | When | JS/TS Framework | Python Framework | Ruby Framework |
+|------|-------------|------|-----------------|-----------------|----------------|
+| **Unit** | Individual functions in isolation | Always | Vitest / Jest | pytest | RSpec |
+| **Integration** | API endpoints, database operations | Always | Vitest / Supertest | pytest | RSpec / request specs |
+| **E2E** | Critical user flows | Critical paths | Playwright | Playwright / pytest | Capybara |
 
 ## Edge Cases You MUST Test
 

@@ -1,6 +1,6 @@
 ---
 name: create-pr
-description: "Creates GitHub pull requests with properly formatted titles, a body matching Sprolio's PR template, and appropriate type/scope labels. Automatically creates labels if they don't exist. Use when creating PRs, submitting changes for review, or when the user says /pr or asks to create a pull request. **PROACTIVE ACTIVATION**: Auto-invoke when a branch has commits ahead of main and the user signals the work is ready. **DETECTION**: Run git log origin/main..HEAD - if commits exist and user signals readiness, offer to open a PR. User says \"open a PR\", \"ready for review\", \"this is done\", \"let's merge\", \"submit this\". **USE CASES**: Feature or fix complete, user finished a series of commits and mentions review or merging."
+description: "Creates GitHub pull requests with properly formatted titles, a body matching the project's PR template, and appropriate type/scope labels. Automatically creates labels if they don't exist. Use when creating PRs, submitting changes for review, or when the user says /pr or asks to create a pull request. **PROACTIVE ACTIVATION**: Auto-invoke when a branch has commits ahead of main and the user signals the work is ready. **DETECTION**: Run git log origin/main..HEAD - if commits exist and user signals readiness, offer to open a PR. User says \"open a PR\", \"ready for review\", \"this is done\", \"let's merge\", \"submit this\". **USE CASES**: Feature or fix complete, user finished a series of commits and mentions review or merging."
 allowed-tools: Bash(git:*), Bash(gh:*), Bash(gh pr:*), Bash(gh label:*), Read, Grep, Glob
 ---
 
@@ -34,8 +34,8 @@ Creates GitHub PRs with conventional commit titles and a body that mirrors `.git
 
 ### Scopes (optional but recommended)
 
-- `backend` — Rails API (`apps/backend`)
-- `web` — React frontend (`apps/web`)
+- `backend` — Backend/API (`apps/backend` or `apps/api`)
+- `web` — Frontend (`apps/web`)
 - `types` — Shared TypeScript types (`packages/types`)
 - `api` — Public API contract (serializers, endpoints)
 - `infra` — Deployment, Docker, Kamal, CI
@@ -67,7 +67,7 @@ Creates GitHub PRs with conventional commit titles and a body that mirrors `.git
    git push -u origin HEAD
    ```
 
-4. **Create PR** using gh CLI with title and body:
+4. **Create PR** using gh CLI with title and body. If `.github/pull_request_template.md` exists, use it as the PR body instead of the default template:
    ```bash
    gh pr create --title "<type>(<scope>): <summary>" --body "<body from template>"
    ```
@@ -86,7 +86,9 @@ Creates GitHub PRs with conventional commit titles and a body that mirrors `.git
 
    <Describe the change concisely. What does this PR do and why?>
 
-   ## Related issue
+   ## Why
+
+   <What problem does this solve? Link to issue if applicable.>
 
    <!-- Closes #123 / Fixes #123 / Resolves #123 -->
 
@@ -104,53 +106,42 @@ Creates GitHub PRs with conventional commit titles and a body that mirrors `.git
 
    ## Checklist
 
-   - [ ] Tests pass (`pnpm test`)
-   - [ ] Types are up to date — if the Rails API response shape changed, `packages/types` was updated accordingly
-   - [ ] No financial calculation logic was changed without corresponding test coverage
+   - [ ] Tests pass (`<test command>`)
    - [ ] No new dependencies introduced without justification
    - [ ] Breaking changes are documented below (if any)
 
    ## Breaking changes
 
    <!-- List any breaking API contracts, renamed fields, removed endpoints, or behaviour changes. Leave blank if none. -->
-
-   ## Regulatory / compliance notes
-
-   <!-- Does this change affect data handling, tax calculations, user data storage, or anything with regulatory implications? Leave blank if not applicable. -->
    EOF
    )"
    ```
 
 ## Examples
 
-### New backend feature
+### New feature
 ```
-feat(backend): Add cost basis calculation for FIFO method
-```
-
-### Bug fix in shared types
-```
-fix(types): Correct PortfolioPosition return field type to decimal string
+feat(auth): Add OAuth2 login support
 ```
 
-### Frontend improvement
+### Bug fix
 ```
-feat(web): Add portfolio performance chart with time range selector
+fix(api): Correct pagination offset calculation
 ```
 
 ### Breaking API change
 ```
-feat(api)!: Rename holdings endpoint response field cost_price to cost_basis
+feat(api)!: Rename response field user_name to username
 ```
 
 ### Infra / tooling
 ```
-chore(infra): Update Kamal deployment configuration for staging
+chore(infra): Update Docker base image to node:22-alpine
 ```
 
 ### No scope (affects multiple areas)
 ```
-chore: Upgrade pnpm and synchronise lockfile
+chore: Upgrade dependencies and synchronise lockfile
 ```
 
 ## Validation
@@ -173,7 +164,7 @@ After creating the PR, assign labels based on the type and scope extracted from 
 
 **Standard labels to apply:**
 - **Type label** (from `<type>(<scope>):`): `feat`, `fix`, `perf`, `test`, `docs`, `refactor`, `build`, `ci`, `chore`
-- **Scope label** (if scope present): `backend`, `web`, `types`, `api`, `infra`, `docs`
+- **Scope label** (if scope present): derived from the scope in the PR title
 - **Special labels:** `breaking` (if `!` in title), `dependencies` (for dependency updates), `security` (for security fixes)
 
 Create labels if they don't exist. See `references/labels.md` for complete color mapping and implementation script.
