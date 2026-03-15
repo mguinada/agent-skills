@@ -1,0 +1,110 @@
+{
+  "skill_name": "design-pattern-adopter",
+  "evals": [
+    {
+      "id": 1,
+      "name": "factory-method-detection",
+      "prompt": "I have this code that creates different types of notifications (email, SMS, push). Right now I have a big switch statement in my NotificationService class. Every time I add a new notification type, I have to modify the service. How should I restructure this?\n\n```typescript\nclass NotificationService {\n  send(type: string, message: string, recipient: string) {\n    switch(type) {\n      case 'email':\n        const email = new EmailNotifier();\n        email.send(recipient, message);\n        break;\n      case 'sms':\n        const sms = new SMSNotifier();\n        sms.send(recipient, message);\n        break;\n      case 'push':\n        const push = new PushNotifier();\n        push.send(recipient, message);\n        break;\n    }\n  }\n}\n```",
+      "expected_output": "Should identify Factory Method pattern as appropriate solution to eliminate switch statement and allow extension without modification",
+      "files": [],
+      "assertions": [
+        {
+          "name": "Suggests Factory Method",
+          "check": "Output mentions Factory Method pattern"
+        },
+        {
+          "name": "Explains why it fits",
+          "check": "Output explains that Factory Method lets subclasses decide which notifier to create"
+        },
+        {
+          "name": "Shows implementation approach",
+          "check": "Output provides concrete steps or code for implementing the pattern"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "no-pattern-needed",
+      "prompt": "I need to add a method to my User class that returns the user's full name. Currently I just have firstName and lastName fields. Should I use a design pattern here?\n\n```typescript\nclass User {\n  constructor(\n    private firstName: string,\n    private lastName: string,\n    private email: string\n  ) {}\n\n  // I want to add getFullName() here\n}\n```",
+      "expected_output": "Should advise against using a design pattern - a simple method is sufficient",
+      "files": [],
+      "assertions": [
+        {
+          "name": "Advises against pattern",
+          "check": "Output indicates no design pattern is needed for this simple case"
+        },
+        {
+          "name": "Recommends simple solution",
+          "check": "Output suggests a simple getFullName() method is the right approach"
+        },
+        {
+          "name": "Explains reasoning",
+          "check": "Output explains why patterns would be over-engineering here"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "strategy-pattern-selection",
+      "prompt": "I'm building a payment processing system that needs to handle multiple payment methods (credit card, PayPal, crypto, bank transfer). Each has different validation rules and processing logic. Currently I have a PaymentProcessor with a massive processPayment method that has nested if-else statements. I need to be able to easily add new payment methods and switch between them at runtime based on user selection. What's the best approach?",
+      "expected_output": "Should identify Strategy pattern as the best fit, potentially mentioning Factory Method as complementary",
+      "files": [],
+      "assertions": [
+        {
+          "name": "Identifies Strategy pattern",
+          "check": "Output recommends Strategy pattern for encapsulating payment algorithms"
+        },
+        {
+          "name": "Explains runtime switching",
+          "check": "Output explains how Strategy enables switching payment methods at runtime"
+        },
+        {
+          "name": "Mentions open/closed benefit",
+          "check": "Output mentions that new payment methods can be added without modifying existing code"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "decorator-vs-inheritance",
+      "prompt": "I have a Coffee class and I need to support many combinations of add-ons: milk, sugar, cream, caramel, vanilla, whipped cream, etc. Currently I have subclasses like CoffeeWithMilk, CoffeeWithMilkAndSugar, CoffeeWithCreamAndCaramel, etc. I already have 20+ classes and it's getting unmanageable. How should I restructure this?",
+      "expected_output": "Should identify Decorator pattern as the solution to avoid class explosion",
+      "files": [],
+      "assertions": [
+        {
+          "name": "Identifies Decorator pattern",
+          "check": "Output recommends Decorator pattern for this scenario"
+        },
+        {
+          "name": "Explains class explosion problem",
+          "check": "Output explains why inheritance causes exponential class growth"
+        },
+        {
+          "name": "Shows composition approach",
+          "check": "Output demonstrates wrapping components to add behavior dynamically"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "observer-for-events",
+      "prompt": "I have an OrderService that needs to notify multiple systems when an order is placed: InventoryService needs to update stock, EmailService needs to send confirmation, AnalyticsService needs to track the event, LoyaltyService needs to update points, and there might be more services added in the future. Right now OrderService directly calls all these services, which makes it tightly coupled. How can I decouple this?",
+      "expected_output": "Should identify Observer pattern as the solution for event notification",
+      "files": [],
+      "assertions": [
+        {
+          "name": "Identifies Observer pattern",
+          "check": "Output recommends Observer pattern for decoupling event notifications"
+        },
+        {
+          "name": "Explains subscription mechanism",
+          "check": "Output explains how services can subscribe to order events"
+        },
+        {
+          "name": "Mentions loose coupling benefit",
+          "check": "Output explains how this reduces coupling between OrderService and dependent services"
+        }
+      ]
+    }
+  ]
+}
