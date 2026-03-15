@@ -1,0 +1,7 @@
+{
+  "name": "ai-coding-toolkit",
+  "description": "AI coding skills and agents for Claude Code",
+  "version": "1.0.0",
+  "author": { "name": "mguinada" },
+  "license": "MIT"
+}

@@ -4,7 +4,12 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Repository Overview
 
-This is a collection of AI agent skills following the [Agent Skills](https://agentskills.io/) format. Each skill is a self-contained knowledge package that extends Claude Code's capabilities for specific development tasks.
+This is a Claude Code plugin and Agent Skills collection. It distributes AI coding skills and subagents via two formats:
+
+- **Claude Code plugin** — install with `claude plugin install mguinada/ai-coding-toolkit`
+- **Agent Skills** — install with `npx skills add mguinada/ai-coding-toolkit`
+
+Each skill is a self-contained knowledge package that extends Claude Code's capabilities for specific development tasks.
 
 ## Plan Mode
 
@@ -28,7 +33,13 @@ This is a collection of AI agent skills following the [Agent Skills](https://age
 
 ## Installation
 
-Users install skills via:
+Plugin install (skills + agents):
+
+```bash
+claude plugin install mguinada/ai-coding-toolkit
+```
+
+Skills-only install:
 
 ```bash
 npx skills add mguinada/ai-coding-toolkit
@@ -90,9 +101,9 @@ After modifying a skill:
 3. Check that all code examples are accurate
 4. Ensure description properly identifies when to use the skill
 
-## Updating README.md
+## Updating skills/README.md
 
-When adding or updating a skill, you must also update `README.md` following this pattern:
+When adding or updating a skill, you must also update `skills/README.md` following this pattern:
 
 ```markdown
 ### Skill Name
