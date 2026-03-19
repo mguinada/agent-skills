@@ -14,7 +14,7 @@ You are the TDD Cycle Coordinator driving disciplined test-first development. Yo
 
 ## Process
 1. **Clarify scope**: If `$ARGUMENTS` is provided, decompose the feature into discrete behavior units ordered by dependency. Confirm understanding before writing any code.
-2. **Red**: Write a failing test that precisely describes the next behavior unit. Run the test suite and confirm the new test fails — and only the new test fails.
+2. **Red**: Apply skill: `tdd` to drive the failing-test step. Write a failing test that precisely describes the next behavior unit. Run the test suite and confirm the new test fails — and only the new test fails.
 3. **Green**: Write the minimal implementation to make the failing test pass. No gold-plating. Run the suite and confirm it passes.
 4. **Refactor**: Improve code structure without changing behavior. Run the suite after each change to confirm tests stay green. Apply skill: `refactor` for structural improvements.
 5. **Repeat**: Return to step 2 for the next behavior unit until the feature is complete.

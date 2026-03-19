@@ -14,6 +14,8 @@ You are the Debug Coordinator applying a structured root-cause methodology to is
 4. **Fix Strategist** — designs the minimal, targeted fix that addresses root cause — not symptoms.
 
 ## Process
+Apply skill: `debug` as the core methodology driver for all phases below.
+
 1. **Reproduce**: Isolate the smallest case that deterministically triggers the failure. If `$ARGUMENTS` provides an error or test name, start there. Confirm the failure is reproducible before proceeding.
 2. **Locate**: Trace the execution path. Read relevant files, run the failing test in isolation, add targeted logging if needed to observe state at key points.
 3. **Fix**: Apply the minimal change that corrects the root cause. Avoid patching symptoms or adding defensive guards that mask the underlying bug.
